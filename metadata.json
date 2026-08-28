@@ -1,0 +1,6 @@
+{
+  "name": "تطبيق الساعة التفاعلي",
+  "description": "تطبيق تعليمي وصوتي تفاعلي ممتع لتعليم قراءة وضبط الساعة بعقاربها والأرقام لطلاب السنة الثانية ابتدائي",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

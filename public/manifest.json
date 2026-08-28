@@ -1,0 +1,67 @@
+{
+  "id": "/?source=pwa",
+  "name": "ساعتي التفاعلية - التعلم الممتع",
+  "short_name": "ساعتي التفاعلية",
+  "description": "تطبيق تعليمي وصوتي تفاعلي ممتع لتعليم قراءة وضبط الساعة بعقاربها والأرقام لطلاب السنة الثانية ابتدائي بنطق صوتي واضح ومسابقات تشجيعية.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fffbeb",
+  "theme_color": "#d97706",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": [
+    "education",
+    "kids",
+    "games"
+  ],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.jpg",
+      "sizes": "1200x675",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "واجهة تطبيق ساعتي التفاعلية لتعليم الوقت للأطفال"
+    },
+    {
+      "src": "/screenshot-mobile.jpg",
+      "sizes": "1200x675",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "شاشة التدريب والأنشطة التفاعلية في تطبيق ساعتي التفاعلية"
+    }
+  ]
+}
