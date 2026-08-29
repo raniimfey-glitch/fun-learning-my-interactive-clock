@@ -1,12 +1,20 @@
-const CACHE_NAME = 'interactive-clock-v1';
+const CACHE_NAME = 'interactive-clock-pwa-v2';
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
   '/offline.html',
   '/manifest.json',
+  '/favicon.png',
+  '/favicon-32x32.png',
+  '/favicon-16x16.png',
   '/icon.svg',
-  '/icon-192.svg',
-  '/icon-512.svg',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/icon-192-maskable.png',
+  '/icon-512-maskable.png',
+  '/apple-touch-icon.png',
+  '/screenshot-desktop.png',
+  '/screenshot-mobile.png',
   '/og-image.jpg'
 ];
 
