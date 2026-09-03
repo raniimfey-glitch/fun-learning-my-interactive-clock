@@ -7,6 +7,7 @@ import { QuizMode } from './components/QuizMode';
 import { DailyRoutineMode } from './components/DailyRoutineMode';
 import { LearnGuideModal } from './components/LearnGuideModal';
 import { CertificateModal } from './components/CertificateModal';
+import { SplashScreen } from './components/SplashScreen';
 import { sounds } from './utils/soundEffects';
 
 export default function App() {
@@ -39,6 +40,10 @@ export default function App() {
   // Modals
   const [isGuideOpen, setIsGuideOpen] = useState<boolean>(false);
   const [isCertOpen, setIsCertOpen] = useState<boolean>(false);
+  const [isSplashOpen, setIsSplashOpen] = useState<boolean>(() => {
+    const hasSeen = sessionStorage.getItem('clock_splash_seen');
+    return !hasSeen;
+  });
 
   // Synchronize Live Clock if enabled
   useEffect(() => {
@@ -85,6 +90,11 @@ export default function App() {
     }
   };
 
+  const handleCloseSplash = () => {
+    setIsSplashOpen(false);
+    sessionStorage.setItem('clock_splash_seen', 'true');
+  };
+
   return (
     <div
       dir={lang === 'ar' ? 'rtl' : 'ltr'}
@@ -101,6 +111,7 @@ export default function App() {
         onToggleSound={handleToggleSound}
         onOpenGuide={() => setIsGuideOpen(true)}
         onOpenCertificate={() => setIsCertOpen(true)}
+        onOpenSplash={() => setIsSplashOpen(true)}
         lang={lang}
         onToggleLang={handleToggleLang}
       />
@@ -165,6 +176,13 @@ export default function App() {
         isOpen={isCertOpen}
         onClose={() => setIsCertOpen(false)}
         starsCount={starsCount}
+        lang={lang}
+      />
+
+      {/* Modern UI Splash / Welcome Screen */}
+      <SplashScreen
+        isOpen={isSplashOpen}
+        onClose={handleCloseSplash}
         lang={lang}
       />
     </div>

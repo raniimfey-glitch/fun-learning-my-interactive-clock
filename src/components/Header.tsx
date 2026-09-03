@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppMode, Language } from '../types';
-import { Clock, Gamepad2, HelpCircle, Calendar, BookOpen, Award, Volume2, VolumeX, Star, Languages } from 'lucide-react';
+import { Clock, Gamepad2, HelpCircle, Calendar, BookOpen, Award, Volume2, VolumeX, Star, Languages, Sparkles } from 'lucide-react';
 import { sounds } from '../utils/soundEffects';
 
 interface HeaderProps {
@@ -11,6 +11,7 @@ interface HeaderProps {
   onToggleSound: () => void;
   onOpenGuide: () => void;
   onOpenCertificate: () => void;
+  onOpenSplash?: () => void;
   lang: Language;
   onToggleLang: () => void;
 }
@@ -23,6 +24,7 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleSound,
   onOpenGuide,
   onOpenCertificate,
+  onOpenSplash,
   lang,
   onToggleLang,
 }) => {
@@ -112,6 +114,21 @@ export const Header: React.FC<HeaderProps> = ({
               <Award className="w-5 h-5 text-amber-600" />
               <span>{lang === 'en' ? 'Certificate' : 'لَوْحَةُ الْإِنْجَازِ'}</span>
             </button>
+
+            {/* Welcome / Splash Screen Button */}
+            {onOpenSplash && (
+              <button
+                onClick={() => {
+                  sounds.playClick();
+                  onOpenSplash();
+                }}
+                className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-950 border-2 border-amber-300 text-sm font-black transition shadow-xs cursor-pointer active:scale-95"
+                title={lang === 'en' ? 'Welcome / Splash Screen' : 'شَاشَةُ التَّرْحِيبِ'}
+              >
+                <Sparkles className="w-4 h-4 text-amber-600 fill-amber-400" />
+                <span>{lang === 'en' ? 'Welcome' : 'شَاشَةُ التَّرْحِيبِ'}</span>
+              </button>
+            )}
 
             {/* Sound Toggle */}
             <button
