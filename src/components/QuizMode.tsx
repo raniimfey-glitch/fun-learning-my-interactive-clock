@@ -313,43 +313,47 @@ export const QuizMode: React.FC<QuizModeProps> = ({
             {/* Options List */}
             <div className="grid grid-cols-1 gap-3.5 pt-1">
               {currentQuestion.options.map((opt) => {
-                let btnClass = 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-900';
+                let containerClass = 'bg-slate-50 hover:bg-slate-100/80 border-slate-200 hover:border-amber-300 text-slate-900';
                 let icon = null;
 
                 if (isAnswered) {
                   if (opt.isCorrect) {
-                    btnClass = 'bg-emerald-50 border-emerald-500 text-emerald-950 font-black shadow-xs ring-2 ring-emerald-200';
+                    containerClass = 'bg-emerald-50 border-emerald-500 text-emerald-950 font-black shadow-xs ring-2 ring-emerald-200';
                     icon = <CheckCircle className="w-7 h-7 text-emerald-600 shrink-0" />;
                   } else if (selectedOptionId === opt.id && !opt.isCorrect) {
-                    btnClass = 'bg-rose-50 border-rose-500 text-rose-950 font-black';
+                    containerClass = 'bg-rose-50 border-rose-500 text-rose-950 font-black';
                     icon = <XCircle className="w-7 h-7 text-rose-600 shrink-0" />;
                   } else {
-                    btnClass = 'opacity-40 bg-slate-50 border-slate-200 text-slate-400';
+                    containerClass = 'opacity-40 bg-slate-50 border-slate-200 text-slate-400';
                   }
                 }
 
                 return (
-                  <button
+                  <div
                     key={opt.id}
-                    onClick={() => handleSelectOption(opt.id, opt.isCorrect)}
-                    disabled={isAnswered}
-                    className={`p-4 md:p-5 rounded-2xl border-2 transition-all flex items-center justify-between gap-4 active:scale-[0.99] cursor-pointer shadow-2xs ${
-                      lang === 'en' ? 'text-left' : 'text-right'
-                    } ${btnClass}`}
+                    className={`p-1.5 md:p-2 rounded-2xl border-2 transition-all flex items-center gap-2 shadow-2xs ${containerClass}`}
                   >
-                    <div className="flex items-center gap-3.5">
-                      <button
-                        type="button"
-                        onClick={(e) => handleSpeakOption(e, opt.text)}
-                        className="p-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 shadow-xs border border-slate-200 cursor-pointer"
-                        title={lang === 'en' ? 'Listen to option' : 'اِسْتَمِعْ لِلْخِيَارِ'}
-                      >
-                        <Volume2 className="w-5 h-5 text-amber-600" />
-                      </button>
+                    <button
+                      type="button"
+                      onClick={(e) => handleSpeakOption(e, opt.text)}
+                      className="p-3 rounded-xl bg-white hover:bg-amber-100/70 text-slate-800 shadow-xs border border-slate-200 cursor-pointer shrink-0 transition active:scale-95"
+                      title={lang === 'en' ? 'Listen to option' : 'اِسْتَمِعْ لِلْخِيَارِ'}
+                    >
+                      <Volume2 className="w-5 h-5 text-amber-600" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleSelectOption(opt.id, opt.isCorrect)}
+                      disabled={isAnswered}
+                      className={`flex-1 py-3 px-3 md:py-3.5 md:px-4 rounded-xl flex items-center justify-between gap-4 cursor-pointer disabled:cursor-default transition active:scale-[0.99] ${
+                        lang === 'en' ? 'text-left' : 'text-right'
+                      }`}
+                    >
                       <span className="font-black text-lg md:text-2xl">{opt.text}</span>
-                    </div>
-                    {icon}
-                  </button>
+                      {icon}
+                    </button>
+                  </div>
                 );
               })}
             </div>

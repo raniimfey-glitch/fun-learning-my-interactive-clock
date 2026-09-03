@@ -219,10 +219,12 @@ export const DailyRoutineMode: React.FC<DailyRoutineModeProps> = ({ onEarnStar, 
     }
     // Speak time and activity title in slow, friendly pace
     if (lang === 'en') {
-      const speakText = `Time for ${item.title}. ${spoken}. ${item.description}`;
+      const itemSpoken = formatEnglishSpokenTime(item.defaultHours, item.defaultMinutes, true);
+      const speakText = `Time for ${item.title}. ${itemSpoken}. ${item.description}`;
       sounds.speakEnglish(speakText);
     } else {
-      const speakText = `وَقْتُ ${item.title}. السَّاعَةُ ${phoneticArabic}. ${item.description}`;
+      const itemPhoneticArabic = formatArabicSpokenTime(item.defaultHours, item.defaultMinutes, true, true);
+      const speakText = `وَقْتُ ${item.title}. ${itemPhoneticArabic}. ${item.description}`;
       sounds.speakArabic(speakText);
     }
   };
@@ -232,7 +234,7 @@ export const DailyRoutineMode: React.FC<DailyRoutineModeProps> = ({ onEarnStar, 
       const speakText = `Time for ${selectedItem.title}. ${spoken}. ${selectedItem.description}`;
       sounds.speakEnglish(speakText);
     } else {
-      const speakText = `وَقْتُ ${selectedItem.title}. السَّاعَةُ ${phoneticArabic}. ${selectedItem.description}`;
+      const speakText = `وَقْتُ ${selectedItem.title}. ${phoneticArabic}. ${selectedItem.description}`;
       sounds.speakArabic(speakText);
     }
   };

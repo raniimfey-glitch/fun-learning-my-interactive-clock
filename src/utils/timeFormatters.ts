@@ -233,7 +233,7 @@ export function formatArabicSpokenTime(
   phonetic: boolean = false
 ): string {
   const hour12 = hours24 % 12 === 0 ? 12 : hours24 % 12;
-  const period = getPeriodOfDay(hours24);
+  const period = getPeriodOfDay(hours24, 'ar');
   const periodText = phonetic ? period.spokenName : period.name;
 
   let phrase = '';
