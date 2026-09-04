@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, X } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { Language } from '../types';
 
 interface SplashScreenProps {
@@ -40,10 +40,11 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0 }}
+          key="splash-overlay"
+          initial={false}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.02 }}
-          transition={{ duration: 0.4, ease: 'easeInOut' }}
+          transition={{ duration: 0.45, ease: 'easeInOut' }}
           className="fixed inset-0 z-50 w-full h-full min-h-screen flex flex-col justify-between items-center select-none overflow-hidden cursor-pointer"
           style={{
             background: 'radial-gradient(circle at 50% 40%, #fef3c7 0%, #fde68a 30%, #f59e0b 75%, #d97706 100%)',
@@ -58,39 +59,17 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-white/20 blur-2xl pointer-events-none" />
           <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-amber-800/15 blur-3xl pointer-events-none" />
 
-          {/* Top Skip / Dismiss Area */}
-          <div className="relative z-10 w-full max-w-5xl px-6 pt-6 sm:pt-8 flex items-center justify-between">
-            {/* Subtle Title Badge */}
-            <div className="opacity-0 pointer-events-none w-10" />
-
-            {/* Quick Skip Button */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onClose();
-              }}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/40 hover:bg-white/70 text-amber-950 font-bold text-xs sm:text-sm backdrop-blur-xs transition active:scale-95 shadow-xs border border-amber-900/10 cursor-pointer"
-              title={lang === 'en' ? 'Skip' : 'تَخَطٍّ'}
-            >
-              <span>{lang === 'en' ? 'Skip' : 'تَخَطٍّ'}</span>
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
+          {/* Top Spacing Area (No Skip Button) */}
+          <div className="w-full h-8 sm:h-12" />
 
           {/* Main Central Content Area */}
           <div className="relative z-10 flex flex-col items-center justify-center flex-1 px-4 sm:px-6 w-full max-w-xl text-center">
             {/* Animated App Icon Wrapper */}
             <motion.div
-              initial={{ scale: 0.75, opacity: 0, y: 30 }}
               animate={{
-                scale: 1,
-                opacity: 1,
                 y: [0, -12, 0],
               }}
               transition={{
-                scale: { type: 'spring', damping: 16, stiffness: 200 },
-                opacity: { duration: 0.5 },
                 y: { repeat: Infinity, duration: 3, ease: 'easeInOut' },
               }}
               className="relative"
@@ -272,40 +251,25 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
             {/* Typography Centered Below Icon */}
             <div className="mt-8 sm:mt-10 space-y-3">
               {/* Main Title */}
-              <motion.h1
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.18, duration: 0.45 }}
-                className="text-4xl sm:text-5xl md:text-6xl font-black text-amber-950 tracking-tight drop-shadow-sm font-['Baloo_Bhaijaan_2','Tajawal',sans-serif]"
-              >
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-amber-950 tracking-tight drop-shadow-sm font-['Baloo_Bhaijaan_2','Tajawal',sans-serif]">
                 {lang === 'en' ? 'My Interactive Clock' : 'سَاعَتِي التَّفَاعُلِيَّة'}
-              </motion.h1>
+              </h1>
 
               {/* Subtitle */}
-              <motion.p
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.28, duration: 0.45 }}
-                className="text-base sm:text-lg md:text-xl font-bold text-amber-900/90 max-w-md mx-auto leading-relaxed font-['Tajawal',sans-serif]"
-              >
+              <p className="text-base sm:text-lg md:text-xl font-bold text-amber-900/90 max-w-md mx-auto leading-relaxed font-['Tajawal',sans-serif]">
                 {lang === 'en'
                   ? 'Fun learning to read and set the clock with sounds and quizzes'
                   : 'التَّعَلُّمُ الْمُمْتِعُ لِقِرَاءَةِ وَضَبْطِ السَّاعَةِ'}
-              </motion.p>
+              </p>
 
               {/* Requested Text Directly Under Subtitle: ✨️ التّعلّم الممتِع - رنيم فاي ✨️ */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ delay: 0.38, duration: 0.45 }}
-                className="pt-2 flex justify-center"
-              >
+              <div className="pt-2 flex justify-center">
                 <div className="inline-flex items-center gap-2.5 px-6 py-2 rounded-full bg-white/85 hover:bg-white backdrop-blur-md border-2 border-amber-300 shadow-md text-amber-950 font-black text-sm sm:text-base md:text-lg tracking-wide select-none">
                   <span className="text-amber-500 text-lg">✨️</span>
                   <span>التّعلّم الممتِع - رنيم فاي</span>
                   <span className="text-amber-500 text-lg">✨️</span>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
 

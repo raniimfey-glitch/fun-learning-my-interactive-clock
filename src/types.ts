@@ -1,4 +1,4 @@
-export type AppMode = 'explore' | 'set-clock' | 'quiz' | 'routine';
+export type AppMode = 'home' | 'explore' | 'set-clock' | 'quiz' | 'routine';
 
 export type Language = 'en' | 'ar';
 
