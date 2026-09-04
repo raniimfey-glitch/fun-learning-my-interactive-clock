@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppMode, Language } from '../types';
-import { Clock, Gamepad2, HelpCircle, Calendar, Volume2, VolumeX, Star, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Clock, Gamepad2, HelpCircle, Calendar, Volume2, VolumeX, Star, ArrowRight, ArrowLeft, Languages } from 'lucide-react';
 import { sounds } from '../utils/soundEffects';
 
 interface HeaderProps {
@@ -10,6 +10,7 @@ interface HeaderProps {
   soundEnabled: boolean;
   onToggleSound: () => void;
   lang: Language;
+  onToggleLang: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -19,6 +20,7 @@ export const Header: React.FC<HeaderProps> = ({
   soundEnabled,
   onToggleSound,
   lang,
+  onToggleLang,
 }) => {
   const activityNames: Record<Exclude<AppMode, 'home'>, { ar: string; en: string; icon: React.ComponentType<{ className?: string }> }> = {
     explore: { ar: 'اِسْتِكْشَافُ السَّاعَةِ', en: 'Explore Clock', icon: Clock },
@@ -75,8 +77,22 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         )}
 
-        {/* Right Side: Essential Utilities ONLY (Sound + Stars) */}
-        <div className="flex items-center gap-2.5">
+        {/* Right Side: Essential Utilities (Language + Sound + Stars) */}
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* Language Switcher (العربية / English) */}
+          <button
+            type="button"
+            onClick={() => {
+              sounds.playClick();
+              onToggleLang();
+            }}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-950 border-2 border-amber-300 text-xs sm:text-sm font-black transition-all shadow-2xs cursor-pointer active:scale-95"
+            title={lang === 'en' ? 'التبديل إلى العربية' : 'Switch to English'}
+          >
+            <Languages className="w-4 h-4 text-amber-600" />
+            <span>{lang === 'en' ? 'العربية' : 'English'}</span>
+          </button>
+
           {/* Sound Toggle */}
           <button
             type="button"

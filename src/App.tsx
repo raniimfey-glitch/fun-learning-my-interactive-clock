@@ -11,7 +11,10 @@ import { sounds } from './utils/soundEffects';
 
 export default function App() {
   const [currentMode, setCurrentMode] = useState<AppMode>('home');
-  const [lang] = useState<Language>('ar');
+  const [lang, setLang] = useState<Language>(() => {
+    const saved = localStorage.getItem('clock_lang');
+    return (saved as Language) || 'ar';
+  });
 
   const [starsCount, setStarsCount] = useState<number>(() => {
     const saved = localStorage.getItem('clock_stars');
@@ -70,6 +73,17 @@ export default function App() {
     setSettings((prev) => ({ ...prev, soundEnabled: newSoundState }));
   };
 
+  const handleToggleLang = () => {
+    const newLang: Language = lang === 'en' ? 'ar' : 'en';
+    setLang(newLang);
+    localStorage.setItem('clock_lang', newLang);
+    if (newLang === 'en') {
+      sounds.speakEnglish('Language switched to English.');
+    } else {
+      sounds.speakArabic('تَمَّ التَّحْوِيلُ إِلَى اللُّغَةِ الْعَرَبِيَّةِ.');
+    }
+  };
+
   const handleCloseSplash = () => {
     setIsSplashOpen(false);
   };
@@ -102,6 +116,7 @@ export default function App() {
           soundEnabled={settings.soundEnabled}
           onToggleSound={handleToggleSound}
           lang={lang}
+          onToggleLang={handleToggleLang}
         />
 
         {/* Main Content Area */}
