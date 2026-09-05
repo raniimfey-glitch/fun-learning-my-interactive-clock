@@ -207,39 +207,41 @@ export const QuizMode: React.FC<QuizModeProps> = ({
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 items-start">
+    <div className="app-game-card w-full flex-1 min-h-0 flex flex-col lg:flex-row gap-2.5 sm:gap-3.5 items-stretch overflow-hidden">
       {/* Left Column: Clock Question Face */}
-      <div className="w-full lg:w-[460px] bg-white rounded-3xl p-5 md:p-6 shadow-sm border border-slate-200/80 flex flex-col items-center">
-        <div className="w-full flex items-center justify-between text-sm font-black text-slate-700 mb-2">
-          <span className="text-amber-800">
-            {lang === 'en' ? 'Look closely at the clock hands ⏱️' : 'اُنْظُرْ إِلَى عَقَارِبِ السَّاعَةِ بِتَرْكِيزٍ ⏱️'}
+      <div className="w-full lg:w-[380px] bg-white rounded-2xl sm:rounded-3xl p-2.5 sm:p-3.5 shadow-xs border border-slate-200/80 flex flex-col items-center justify-between shrink-0 overflow-hidden">
+        <div className="w-full flex items-center justify-between text-xs sm:text-sm font-black text-slate-700 mb-1 shrink-0">
+          <span className="text-amber-800 truncate">
+            {lang === 'en' ? 'Look at the clock hands ⏱️' : 'اُنْظُرْ إِلَى عَقَارِبِ السَّاعَةِ ⏱️'}
           </span>
-          <span className="bg-amber-100 text-amber-900 px-3 py-1 rounded-full font-black border border-amber-300">
-            {lang === 'en' ? `Question #${questionCount + 1}` : `السُّؤَالُ رَقْمُ: ${questionCount + 1}`}
+          <span className="bg-amber-100 text-amber-900 px-2 py-0.5 rounded-lg font-black border border-amber-300 text-xs">
+            {lang === 'en' ? `#${questionCount + 1}` : `سُؤَالٌ ${questionCount + 1}`}
           </span>
         </div>
 
-        {currentQuestion && (
-          <InteractiveClock
-            hours={currentQuestion.targetHours}
-            minutes={currentQuestion.targetMinutes}
-            interactive={false}
-            showMinuteRing={selectedLevel === 3}
-            showHandLabels={true}
-            size={340}
-            lang={lang}
-          />
-        )}
+        <div className="flex-1 min-h-0 w-full flex items-center justify-center overflow-hidden py-1">
+          {currentQuestion && (
+            <InteractiveClock
+              hours={currentQuestion.targetHours}
+              minutes={currentQuestion.targetMinutes}
+              interactive={false}
+              showMinuteRing={selectedLevel === 3}
+              showHandLabels={true}
+              size={320}
+              lang={lang}
+            />
+          )}
+        </div>
 
         {/* Level Switcher */}
-        <div className="w-full mt-4 pt-3.5 border-t border-slate-100 flex flex-col gap-2.5">
-          <div className="text-sm font-black text-slate-700">
-            {lang === 'en' ? 'Select Question Level:' : 'اِخْتَرْ مُسْتَوَى الْأَسْئِلَةِ (السَّنَةُ الثَّانِيَةُ):'}
+        <div className="w-full mt-2 pt-2 border-t border-slate-100 flex flex-col gap-1.5 shrink-0">
+          <div className="text-xs font-black text-slate-700">
+            {lang === 'en' ? 'Select Level:' : 'مُسْتَوَى الْأَسْئِلَةِ:'}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm font-black">
+          <div className="grid grid-cols-3 gap-1.5 text-xs font-black">
             {[
               { id: 1, label: lang === 'en' ? "1. O'clock & Half" : '1. تَمَامًا وَنِصْفٌ' },
-              { id: 2, label: lang === 'en' ? '2. Quarters (:15, :45)' : '2. رُبْعٌ وَإِلَّا رُبْعًا' },
+              { id: 2, label: lang === 'en' ? '2. Quarters' : '2. رُبْعٌ وَإِلَّا رُبْعًا' },
               { id: 3, label: lang === 'en' ? '3. 5-Min Multiples' : '3. كُلُّ 5 دَقَائِقَ' },
             ].map((lvl) => (
               <button
@@ -248,13 +250,13 @@ export const QuizMode: React.FC<QuizModeProps> = ({
                   sounds.playClick();
                   setSelectedLevel(lvl.id);
                 }}
-                className={`py-3 px-3 rounded-2xl transition text-center active:scale-95 cursor-pointer border-2 ${
+                className={`py-2 px-1 rounded-xl transition text-center active:scale-95 cursor-pointer border ${
                   selectedLevel === lvl.id
-                    ? 'bg-amber-500 border-amber-600 text-white shadow-xs font-black'
+                    ? 'bg-amber-500 border-amber-600 text-white shadow-2xs font-black'
                     : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
                 }`}
               >
-                {lvl.label}
+                <span className="truncate block">{lvl.label}</span>
               </button>
             ))}
           </div>
@@ -262,116 +264,118 @@ export const QuizMode: React.FC<QuizModeProps> = ({
       </div>
 
       {/* Right Column: Multiple Choice Options & Explanation */}
-      <div className="w-full lg:flex-1 flex flex-col gap-4">
+      <div className="w-full lg:flex-1 min-h-0 flex flex-col gap-2 shrink-1 overflow-hidden">
         {/* Header Stats */}
-        <div className="bg-white rounded-3xl p-4 md:p-5 shadow-sm border border-slate-200/80 flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 bg-amber-50 text-amber-900 px-4 py-2 rounded-2xl border-2 border-amber-200 text-base font-black">
-              <Star className="w-5 h-5 fill-amber-400 text-amber-500" />
+        <div className="bg-white rounded-2xl p-2.5 sm:p-3 shadow-xs border border-slate-200/80 flex items-center justify-between gap-2 shrink-0">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 bg-amber-50 text-amber-900 px-3 py-1 rounded-xl border border-amber-200 text-xs sm:text-sm font-black">
+              <Star className="w-4 h-4 fill-amber-400 text-amber-500" />
               <span>{lang === 'en' ? `Score: ${score}` : `النِّقَاطُ: ${score}`}</span>
             </div>
             {streak > 1 && (
-              <div className="flex items-center gap-2 bg-emerald-50 text-emerald-900 px-4 py-2 rounded-2xl border-2 border-emerald-200 text-base font-black animate-pulse">
-                <span>{lang === 'en' ? `Streak: ${streak} 🔥` : `مُتَتَالٍ: ${streak} 🔥`}</span>
+              <div className="flex items-center gap-1.5 bg-emerald-50 text-emerald-900 px-2.5 py-1 rounded-xl border border-emerald-200 text-xs font-black animate-pulse">
+                <span>{streak} 🔥</span>
               </div>
             )}
           </div>
 
           <button
             onClick={nextQuestion}
-            className="flex items-center gap-2 text-sm font-black text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-2xl transition active:scale-95 cursor-pointer border border-slate-200"
+            className="flex items-center gap-1.5 text-xs font-black text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-xl transition active:scale-95 cursor-pointer border border-slate-200"
           >
-            <RotateCcw className="w-4 h-4" />
-            <span>{lang === 'en' ? 'Skip Question' : 'تَخَطِّي السُّؤَالِ'}</span>
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>{lang === 'en' ? 'Skip' : 'تَخَطَّ'}</span>
           </button>
         </div>
 
         {/* Question & Options */}
         {currentQuestion && (
-          <div className="bg-white rounded-3xl p-6 md:p-7 shadow-sm border border-slate-200/80 flex flex-col gap-5">
-            <div className="flex items-center justify-between gap-3">
-              <h3 className="text-2xl md:text-3xl font-black text-slate-950 flex items-center gap-2.5">
-                <HelpCircle className="w-7 h-7 text-amber-600 shrink-0" />
-                <span>{currentQuestion.questionPrompt}</span>
-              </h3>
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xs border border-slate-200/80 flex-1 min-h-0 flex flex-col justify-between overflow-y-auto app-scrollable-card">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between gap-2 shrink-0">
+                <h3 className="text-base sm:text-lg font-black text-slate-950 flex items-center gap-1.5">
+                  <HelpCircle className="w-5 h-5 text-amber-600 shrink-0" />
+                  <span>{currentQuestion.questionPrompt}</span>
+                </h3>
 
-              <button
-                onClick={() => {
-                  if (lang === 'en') {
-                    sounds.speakEnglish(currentQuestion.questionPrompt);
-                  } else {
-                    sounds.speakArabic(currentQuestion.questionPrompt);
+                <button
+                  onClick={() => {
+                    if (lang === 'en') {
+                      sounds.speakEnglish(currentQuestion.questionPrompt);
+                    } else {
+                      sounds.speakArabic(currentQuestion.questionPrompt);
+                    }
+                  }}
+                  className="p-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 transition cursor-pointer active:scale-95 shrink-0"
+                  title={lang === 'en' ? 'Listen to question' : 'اِسْتَمِعْ لِلسُّؤَالِ'}
+                >
+                  <Volume2 className="w-4 h-4 text-amber-600" />
+                </button>
+              </div>
+
+              {/* Options List */}
+              <div className="grid grid-cols-1 gap-2 pt-1">
+                {currentQuestion.options.map((opt) => {
+                  let containerClass = 'bg-slate-50 hover:bg-slate-100/80 border-slate-200 hover:border-amber-300 text-slate-900';
+                  let icon = null;
+
+                  if (isAnswered) {
+                    if (opt.isCorrect) {
+                      containerClass = 'bg-emerald-50 border-emerald-500 text-emerald-950 font-black shadow-2xs ring-1 ring-emerald-200';
+                      icon = <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />;
+                    } else if (selectedOptionId === opt.id && !opt.isCorrect) {
+                      containerClass = 'bg-rose-50 border-rose-500 text-rose-950 font-black';
+                      icon = <XCircle className="w-5 h-5 text-rose-600 shrink-0" />;
+                    } else {
+                      containerClass = 'opacity-40 bg-slate-50 border-slate-200 text-slate-400';
+                    }
                   }
-                }}
-                className="p-3 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-900 border-2 border-amber-200 transition cursor-pointer active:scale-95 shrink-0"
-                title={lang === 'en' ? 'Listen to question' : 'اِسْتَمِعْ لِلسُّؤَالِ'}
-              >
-                <Volume2 className="w-6 h-6 text-amber-600" />
-              </button>
-            </div>
 
-            {/* Options List */}
-            <div className="grid grid-cols-1 gap-3.5 pt-1">
-              {currentQuestion.options.map((opt) => {
-                let containerClass = 'bg-slate-50 hover:bg-slate-100/80 border-slate-200 hover:border-amber-300 text-slate-900';
-                let icon = null;
-
-                if (isAnswered) {
-                  if (opt.isCorrect) {
-                    containerClass = 'bg-emerald-50 border-emerald-500 text-emerald-950 font-black shadow-xs ring-2 ring-emerald-200';
-                    icon = <CheckCircle className="w-7 h-7 text-emerald-600 shrink-0" />;
-                  } else if (selectedOptionId === opt.id && !opt.isCorrect) {
-                    containerClass = 'bg-rose-50 border-rose-500 text-rose-950 font-black';
-                    icon = <XCircle className="w-7 h-7 text-rose-600 shrink-0" />;
-                  } else {
-                    containerClass = 'opacity-40 bg-slate-50 border-slate-200 text-slate-400';
-                  }
-                }
-
-                return (
-                  <div
-                    key={opt.id}
-                    className={`p-1.5 md:p-2 rounded-2xl border-2 transition-all flex items-center gap-2 shadow-2xs ${containerClass}`}
-                  >
-                    <button
-                      type="button"
-                      onClick={(e) => handleSpeakOption(e, opt.text)}
-                      className="p-3 rounded-xl bg-white hover:bg-amber-100/70 text-slate-800 shadow-xs border border-slate-200 cursor-pointer shrink-0 transition active:scale-95"
-                      title={lang === 'en' ? 'Listen to option' : 'اِسْتَمِعْ لِلْخِيَارِ'}
+                  return (
+                    <div
+                      key={opt.id}
+                      className={`p-1 rounded-xl border transition-all flex items-center gap-1.5 shadow-2xs ${containerClass}`}
                     >
-                      <Volume2 className="w-5 h-5 text-amber-600" />
-                    </button>
+                      <button
+                        type="button"
+                        onClick={(e) => handleSpeakOption(e, opt.text)}
+                        className="p-2 rounded-lg bg-white hover:bg-amber-100/70 text-slate-800 shadow-2xs border border-slate-200 cursor-pointer shrink-0 transition active:scale-95"
+                        title={lang === 'en' ? 'Listen to option' : 'اِسْتَمِعْ لِلْخِيَارِ'}
+                      >
+                        <Volume2 className="w-4 h-4 text-amber-600" />
+                      </button>
 
-                    <button
-                      type="button"
-                      onClick={() => handleSelectOption(opt.id, opt.isCorrect)}
-                      disabled={isAnswered}
-                      className={`flex-1 py-3 px-3 md:py-3.5 md:px-4 rounded-xl flex items-center justify-between gap-4 cursor-pointer disabled:cursor-default transition active:scale-[0.99] ${
-                        lang === 'en' ? 'text-left' : 'text-right'
-                      }`}
-                    >
-                      <span className="font-black text-lg md:text-2xl">{opt.text}</span>
-                      {icon}
-                    </button>
-                  </div>
-                );
-              })}
+                      <button
+                        type="button"
+                        onClick={() => handleSelectOption(opt.id, opt.isCorrect)}
+                        disabled={isAnswered}
+                        className={`flex-1 py-2 px-2.5 rounded-lg flex items-center justify-between gap-2 cursor-pointer disabled:cursor-default transition active:scale-[0.99] ${
+                          lang === 'en' ? 'text-left' : 'text-right'
+                        }`}
+                      >
+                        <span className="font-black text-sm sm:text-base md:text-lg">{opt.text}</span>
+                        {icon}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Explanation & Next Question Button */}
             {isAnswered && (
-              <div className="mt-2 pt-4 border-t border-slate-100 flex flex-col gap-4">
-                <div className="bg-blue-50 text-blue-950 p-5 rounded-3xl border-2 border-blue-200 text-base md:text-lg font-bold leading-relaxed flex flex-col gap-2.5">
+              <div className="mt-2 pt-2 border-t border-slate-100 flex flex-col gap-2 shrink-0">
+                <div className="bg-blue-50 text-blue-950 p-2.5 rounded-2xl border border-blue-200 text-xs sm:text-sm font-bold leading-relaxed flex flex-col gap-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="font-black text-blue-950 text-lg">
-                      {lang === 'en' ? '💡 Step-by-Step Explanation:' : '💡 الشَّرْحُ التَّوْضِيحِيُّ:'}
+                    <span className="font-black text-blue-950 text-xs sm:text-sm">
+                      {lang === 'en' ? '💡 Explanation:' : '💡 الشَّرْحُ:'}
                     </span>
                     <button
                       onClick={handleSpeakExplanation}
-                      className="flex items-center gap-1.5 text-sm font-black bg-blue-100 hover:bg-blue-200 text-blue-900 px-3.5 py-1.5 rounded-xl transition cursor-pointer border border-blue-300"
+                      className="flex items-center gap-1 text-xs font-black bg-blue-100 hover:bg-blue-200 text-blue-900 px-2.5 py-1 rounded-lg transition cursor-pointer border border-blue-300"
                     >
-                      <Volume2 className="w-4 h-4" />
-                      <span>{lang === 'en' ? 'Listen to Explanation' : 'اِسْتَمِعْ لِلشَّرْحِ'}</span>
+                      <Volume2 className="w-3.5 h-3.5" />
+                      <span>{lang === 'en' ? 'Listen' : 'اسْتَمِعْ'}</span>
                     </button>
                   </div>
                   <div className="text-slate-800">{currentQuestion.explanation}</div>
@@ -380,10 +384,10 @@ export const QuizMode: React.FC<QuizModeProps> = ({
                 <button
                   id="quiz-next-question-btn"
                   onClick={nextQuestion}
-                  className="w-full py-4 px-6 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white font-black text-lg md:text-xl shadow-md transition flex items-center justify-center gap-2.5 cursor-pointer active:scale-98"
+                  className="w-full py-2.5 sm:py-3 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-black text-sm sm:text-base shadow-xs transition flex items-center justify-center gap-2 cursor-pointer active:scale-98"
                 >
                   <span>{lang === 'en' ? 'Next Question' : 'السُّؤَالُ التَّالِي'}</span>
-                  {lang === 'en' ? <ArrowRight className="w-6 h-6" /> : <ArrowLeft className="w-6 h-6" />}
+                  {lang === 'en' ? <ArrowRight className="w-5 h-5" /> : <ArrowLeft className="w-5 h-5" />}
                 </button>
               </div>
             )}

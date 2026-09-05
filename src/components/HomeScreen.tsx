@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppMode, Language } from '../types';
-import { Clock, Gamepad2, HelpCircle, Calendar, Sparkles } from 'lucide-react';
+import { BookOpen, Clock, Gamepad2, HelpCircle, Calendar, Sparkles } from 'lucide-react';
 import { sounds } from '../utils/soundEffects';
 
 interface HomeScreenProps {
@@ -24,6 +24,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   lang = 'ar',
 }) => {
   const tabs: ActivityTabItem[] = [
+    {
+      id: 'guide',
+      titleAr: 'دَلِيلُ الدَّرْسِ',
+      titleEn: 'Lesson Guide',
+      icon: BookOpen,
+      colorGradient: 'from-blue-500 to-blue-600',
+      borderColor: 'border-blue-300 hover:border-blue-400',
+      shadowColor: 'shadow-blue-500/20',
+      badgeBg: 'bg-blue-100 text-blue-950',
+    },
     {
       id: 'explore',
       titleAr: 'اِسْتِكْشَافُ السَّاعَةِ',
@@ -67,20 +77,20 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   ];
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center max-w-4xl w-full mx-auto py-6 sm:py-10 px-4">
+    <div className="flex-1 min-h-0 w-full flex flex-col justify-center items-center py-2 px-2 overflow-hidden">
       {/* Visual Welcome Emblem */}
-      <div className="flex flex-col items-center text-center mb-8 sm:mb-10">
-        <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-amber-100/90 border border-amber-300 text-amber-950 text-sm sm:text-base font-black shadow-xs mb-3">
-          <Sparkles className="w-4 h-4 text-amber-600" />
+      <div className="flex flex-col items-center text-center mb-3 sm:mb-4 shrink-0">
+        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-amber-100/90 border border-amber-300 text-amber-950 text-xs sm:text-sm font-black shadow-2xs mb-1.5">
+          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
           <span>{lang === 'en' ? 'Fun Learning - Ranim Fay' : '✨️ التّعلّم الممتِع - رنيم فاي ✨️'}</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-800 tracking-tight">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-800 tracking-tight">
           {lang === 'en' ? 'Select an Activity:' : 'اخْتَرْ نَشَاطًا:'}
         </h2>
       </div>
 
       {/* Clean Grid of Activity Tabs - Names Only Without Superfluous Explanations */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3.5 w-full max-w-[850px] shrink-1">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const title = lang === 'en' ? tab.titleEn : tab.titleAr;
@@ -93,18 +103,20 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 sounds.playClick();
                 onSelectMode(tab.id);
               }}
-              className={`group relative flex items-center gap-4 p-5 sm:p-6 rounded-3xl bg-white border-3 ${tab.borderColor} shadow-md ${tab.shadowColor} hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] transition-all duration-200 cursor-pointer text-right select-none`}
+              className={`group relative flex items-center gap-3 p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-white border-2 sm:border-3 ${tab.borderColor} shadow-xs ${tab.shadowColor} hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 cursor-pointer text-right select-none ${
+                tab.id === 'guide' ? 'sm:col-span-2' : ''
+              }`}
             >
               {/* Vibrant Icon Box */}
               <div
-                className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr ${tab.colorGradient} text-white flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform`}
+                className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-tr ${tab.colorGradient} text-white flex items-center justify-center shadow-xs shrink-0 group-hover:scale-105 transition-transform`}
               >
-                <Icon className="w-7 h-7 sm:w-8 sm:h-8" />
+                <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
 
               {/* Title Only */}
-              <div className="flex-1">
-                <span className="text-xl sm:text-2xl md:text-2xl font-black text-slate-900 group-hover:text-amber-700 transition-colors block">
+              <div className="flex-1 min-w-0">
+                <span className="text-base sm:text-lg md:text-xl font-black text-slate-900 group-hover:text-amber-700 transition-colors block truncate">
                   {title}
                 </span>
               </div>

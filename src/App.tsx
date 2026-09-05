@@ -6,6 +6,7 @@ import { ExploreMode } from './components/ExploreMode';
 import { SetClockGame } from './components/SetClockGame';
 import { QuizMode } from './components/QuizMode';
 import { DailyRoutineMode } from './components/DailyRoutineMode';
+import { LearnGuideView } from './components/LearnGuideView';
 import { SplashScreen } from './components/SplashScreen';
 import { sounds } from './utils/soundEffects';
 
@@ -130,6 +131,13 @@ export default function App() {
           )}
 
           {/* Activity Screen: Displays ONLY the chosen activity */}
+          {currentMode === 'guide' && (
+            <LearnGuideView
+              onBackToHome={() => setCurrentMode('home')}
+              lang={lang}
+            />
+          )}
+
           {currentMode === 'explore' && (
             <ExploreMode
               hours={hours}

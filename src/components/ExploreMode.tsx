@@ -91,55 +91,57 @@ export const ExploreMode: React.FC<ExploreModeProps> = ({
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 items-start">
+    <div className="app-game-card w-full flex-1 min-h-0 flex flex-col lg:flex-row gap-2.5 sm:gap-3.5 items-stretch overflow-hidden">
       {/* Left Column: The Interactive Clock Face */}
-      <div className="w-full lg:w-[460px] bg-white rounded-3xl p-5 shadow-sm border border-slate-200/80 flex flex-col items-center">
+      <div className="w-full lg:w-[380px] bg-white rounded-2xl sm:rounded-3xl p-2.5 sm:p-3.5 shadow-xs border border-slate-200/80 flex flex-col items-center justify-between shrink-0 overflow-hidden">
         {/* Helper Note for Kids */}
-        <div className="w-full flex items-center justify-between text-sm font-black text-slate-700 mb-2 px-1 flex-wrap gap-2">
-          <span className="flex items-center gap-2 text-amber-800">
-            <Sparkles className="w-5 h-5 text-amber-600" />
-            <span>
+        <div className="w-full flex items-center justify-between text-xs sm:text-sm font-black text-slate-700 mb-1 px-1 shrink-0">
+          <span className="flex items-center gap-1.5 text-amber-800 truncate">
+            <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
+            <span className="truncate">
               {lang === 'en'
-                ? 'Drag the hands with your finger or mouse:'
-                : 'حَرِّكِ الْعَقَارِبَ مُبَاشَرَةً بِإِصْبَعِكَ أَوْ بِالْفَأْرَةِ:'}
+                ? 'Drag the hands directly:'
+                : 'حَرِّكِ الْعَقَارِبَ مُبَاشَرَةً:'}
             </span>
           </span>
           {settings.isLiveTime && (
-            <span className="bg-emerald-100 text-emerald-900 text-xs md:text-sm px-3 py-1 rounded-full font-black animate-pulse border border-emerald-300">
-              {lang === 'en' ? 'LIVE CLOCK 🔴' : 'سَاعَةٌ حَيَّةٌ الْآنَ 🔴'}
+            <span className="bg-emerald-100 text-emerald-900 text-[11px] sm:text-xs px-2.5 py-0.5 rounded-full font-black animate-pulse border border-emerald-300 shrink-0">
+              {lang === 'en' ? 'LIVE 🔴' : 'حَيَّةٌ الْآنَ 🔴'}
             </span>
           )}
         </div>
 
         {/* The Clock Component */}
-        <InteractiveClock
-          hours={hours}
-          minutes={minutes}
-          seconds={settings.isLiveTime ? seconds : undefined}
-          interactive={!settings.isLiveTime}
-          onChangeTime={onChangeTime}
-          showMinuteRing={settings.showMinuteNumbers}
-          showFractionsOverlay={settings.showFractionsOverlay}
-          showHandLabels={settings.showHandNames}
-          size={340}
-          lang={lang}
-        />
+        <div className="flex-1 min-h-0 w-full flex items-center justify-center overflow-hidden py-1">
+          <InteractiveClock
+            hours={hours}
+            minutes={minutes}
+            seconds={settings.isLiveTime ? seconds : undefined}
+            interactive={!settings.isLiveTime}
+            onChangeTime={onChangeTime}
+            showMinuteRing={settings.showMinuteNumbers}
+            showFractionsOverlay={settings.showFractionsOverlay}
+            showHandLabels={settings.showHandNames}
+            size={320}
+            lang={lang}
+          />
+        </div>
 
         {/* Visual Layer Toggles */}
-        <div className="w-full mt-4 pt-3.5 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-sm font-black text-slate-800">
+        <div className="w-full mt-2 pt-2 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-xs font-black text-slate-800 shrink-0">
           <button
             onClick={() => {
               sounds.playClick();
               onUpdateSettings({ showMinuteNumbers: !settings.showMinuteNumbers });
             }}
-            className={`p-3 rounded-2xl border-2 flex items-center justify-center gap-2 transition cursor-pointer active:scale-95 shadow-2xs ${
+            className={`p-2 rounded-xl border flex items-center justify-center gap-1.5 transition cursor-pointer active:scale-95 shadow-2xs ${
               settings.showMinuteNumbers
                 ? 'bg-blue-50 border-blue-300 text-blue-900 font-black'
                 : 'bg-slate-50 border-slate-200 text-slate-600'
             }`}
           >
-            <Eye className="w-4 h-4 text-blue-600" />
-            <span>{lang === 'en' ? 'Minute Ring (:05-:55)' : 'أَرْقَامُ الدَّقَائِقِ (:05-:55)'}</span>
+            <Eye className="w-3.5 h-3.5 text-blue-600" />
+            <span className="truncate">{lang === 'en' ? 'Minutes (:05-:55)' : 'أَرْقَامُ الدَّقَائِقِ'}</span>
           </button>
 
           <button
@@ -147,14 +149,14 @@ export const ExploreMode: React.FC<ExploreModeProps> = ({
               sounds.playClick();
               onUpdateSettings({ showFractionsOverlay: !settings.showFractionsOverlay });
             }}
-            className={`p-3 rounded-2xl border-2 flex items-center justify-center gap-2 transition cursor-pointer active:scale-95 shadow-2xs ${
+            className={`p-2 rounded-xl border flex items-center justify-center gap-1.5 transition cursor-pointer active:scale-95 shadow-2xs ${
               settings.showFractionsOverlay
                 ? 'bg-amber-50 border-amber-300 text-amber-900 font-black'
                 : 'bg-slate-50 border-slate-200 text-slate-600'
             }`}
           >
-            <Layers className="w-4 h-4 text-amber-600" />
-            <span>{lang === 'en' ? 'Fraction Colors' : 'أَلْوَانُ الْأَرْبَاعِ وَالْأَنْصَافِ'}</span>
+            <Layers className="w-3.5 h-3.5 text-amber-600" />
+            <span className="truncate">{lang === 'en' ? 'Fractions' : 'أَلْوَانُ الْأَرْبَاعِ'}</span>
           </button>
 
           <button
@@ -162,137 +164,141 @@ export const ExploreMode: React.FC<ExploreModeProps> = ({
               sounds.playClick();
               onUpdateSettings({ isLiveTime: !settings.isLiveTime });
             }}
-            className={`p-3 rounded-2xl border-2 flex items-center justify-center gap-2 transition col-span-2 sm:col-span-1 cursor-pointer active:scale-95 shadow-2xs ${
+            className={`p-2 rounded-xl border flex items-center justify-center gap-1.5 transition col-span-2 sm:col-span-1 cursor-pointer active:scale-95 shadow-2xs ${
               settings.isLiveTime
                 ? 'bg-emerald-50 border-emerald-300 text-emerald-900 font-black'
                 : 'bg-slate-50 border-slate-200 text-slate-600'
             }`}
           >
-            <Clock className="w-4 h-4 text-emerald-600" />
-            <span>
+            <Clock className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="truncate">
               {settings.isLiveTime
-                ? (lang === 'en' ? 'Stop Live Clock' : 'إِيقَافُ الْوَقْتِ الْفِعْلِيِّ')
-                : (lang === 'en' ? 'Live Current Time' : 'الْوَقْتُ الْحَقِيقِيُّ الْآنَ')}
+                ? (lang === 'en' ? 'Stop Live' : 'إِيقَافُ الْحَيِّ')
+                : (lang === 'en' ? 'Live Time' : 'الْوَقْتُ الْحَيُّ')}
             </span>
           </button>
         </div>
       </div>
 
       {/* Right Column: Digital Display & Quick Presets */}
-      <div className="w-full lg:flex-1 flex flex-col gap-5">
-        <DigitalDisplay
-          hours={hours}
-          minutes={minutes}
-          seconds={seconds}
-          onChangeTime={onChangeTime}
-          lang={lang}
-        />
+      <div className="w-full lg:flex-1 min-h-0 flex flex-col gap-2.5 shrink-1 overflow-hidden">
+        <div className="shrink-0">
+          <DigitalDisplay
+            hours={hours}
+            minutes={minutes}
+            seconds={seconds}
+            onChangeTime={onChangeTime}
+            lang={lang}
+          />
+        </div>
 
         {/* Quick Presets / Learning Cards */}
-        <div className="bg-white rounded-3xl p-5 md:p-6 shadow-sm border border-slate-200/80">
-          <div className="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100 flex-wrap">
-            <h3 className="font-black text-slate-900 text-lg flex items-center gap-2">
+        <div className="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xs border border-slate-200/80 flex-1 min-h-0 flex flex-col overflow-hidden">
+          <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-100 flex-wrap shrink-0">
+            <h3 className="font-black text-slate-900 text-sm sm:text-base flex items-center gap-1.5">
               <span>
                 {lang === 'en'
-                  ? 'Common Time Presets to Explore & Hear:'
-                  : 'أَوْقَاتٌ نَمُوذَجِيَّةٌ لِلتَّجْرِبَةِ وَالِاسْتِمَاعِ:'}
+                  ? 'Time Presets:'
+                  : 'أَوْقَاتٌ نَمُوذَجِيَّةٌ لِلتَّجْرِبَةِ:'}
               </span>
             </h3>
 
             {/* Category tabs */}
-            <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl text-sm font-black flex-wrap">
+            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-black">
               <button
                 onClick={() => setSelectedCategory('fractions')}
-                className={`px-4 py-2 rounded-xl transition cursor-pointer ${
+                className={`px-2.5 py-1 rounded-lg transition cursor-pointer ${
                   selectedCategory === 'fractions'
-                    ? 'bg-white text-amber-900 shadow-xs font-black'
+                    ? 'bg-white text-amber-900 shadow-2xs font-black'
                     : 'text-slate-700 hover:text-slate-950'
                 }`}
               >
-                {lang === 'en' ? 'Fractions (Quarter/Half)' : 'أَجْزَاءُ السَّاعَةِ (الرُّبْعُ/النِّصْفُ)'}
+                {lang === 'en' ? 'Fractions' : 'الْأَرْبَاعُ وَالنِّصْفُ'}
               </button>
               <button
                 onClick={() => setSelectedCategory('daily')}
-                className={`px-4 py-2 rounded-xl transition cursor-pointer ${
+                className={`px-2.5 py-1 rounded-lg transition cursor-pointer ${
                   selectedCategory === 'daily'
-                    ? 'bg-white text-amber-900 shadow-xs font-black'
+                    ? 'bg-white text-amber-900 shadow-2xs font-black'
                     : 'text-slate-700 hover:text-slate-950'
                 }`}
               >
-                {lang === 'en' ? 'Daily Routine' : 'أَوْقَاتُ الْيَوْمِ الْمَدْرَسِيِّ'}
+                {lang === 'en' ? 'Routine' : 'الْيَوْمِيُّ'}
               </button>
               <button
                 onClick={() => setSelectedCategory('hours')}
-                className={`px-4 py-2 rounded-xl transition cursor-pointer ${
+                className={`px-2.5 py-1 rounded-lg transition cursor-pointer ${
                   selectedCategory === 'hours'
-                    ? 'bg-white text-amber-900 shadow-xs font-black'
+                    ? 'bg-white text-amber-900 shadow-2xs font-black'
                     : 'text-slate-700 hover:text-slate-950'
                 }`}
               >
-                {lang === 'en' ? "O'clock (:00)" : 'السَّاعَاتُ التَّامَّةُ (:00)'}
+                {lang === 'en' ? "O'clock" : 'تَمَامًا'}
               </button>
             </div>
           </div>
 
           {/* Preset Buttons Grid */}
-          {selectedCategory === 'fractions' && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {fractionPresets.map((item, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => applyPreset(item.h, item.m)}
-                  className={`p-4 rounded-2xl bg-amber-50/80 hover:bg-amber-100 border-2 border-amber-200 transition flex flex-col gap-1.5 group active:scale-95 cursor-pointer shadow-2xs ${
-                    lang === 'en' ? 'text-left' : 'text-right'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-black text-slate-900 text-base md:text-lg group-hover:text-amber-900">
-                      {item.label}
-                    </span>
-                    <Volume2 className="w-5 h-5 text-amber-600 opacity-70 group-hover:opacity-100" />
-                  </div>
-                  <span className="text-sm text-slate-700 font-bold">{item.desc}</span>
-                </button>
-              ))}
-            </div>
-          )}
+          <div className="flex-1 min-h-0 overflow-y-auto app-scrollable-card">
+            {selectedCategory === 'fractions' && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {fractionPresets.map((item, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => applyPreset(item.h, item.m)}
+                    className={`p-2.5 rounded-xl bg-amber-50/80 hover:bg-amber-100 border border-amber-200 transition flex flex-col gap-0.5 group active:scale-95 cursor-pointer shadow-2xs ${
+                      lang === 'en' ? 'text-left' : 'text-right'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-black text-slate-900 text-sm group-hover:text-amber-900">
+                        {item.label}
+                      </span>
+                      <Volume2 className="w-4 h-4 text-amber-600 opacity-70 group-hover:opacity-100" />
+                    </div>
+                    <span className="text-xs text-slate-700 font-bold">{item.desc}</span>
+                  </button>
+                ))}
+              </div>
+            )}
 
-          {selectedCategory === 'daily' && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {dailyPresets.map((item, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => applyPreset(item.h, item.m)}
-                  className={`p-4 rounded-2xl bg-sky-50/80 hover:bg-sky-100 border-2 border-sky-200 transition flex flex-col gap-1.5 group active:scale-95 cursor-pointer shadow-2xs ${
-                    lang === 'en' ? 'text-left' : 'text-right'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-black text-slate-900 text-base md:text-lg group-hover:text-sky-900">
-                      {item.label}
-                    </span>
-                    <Volume2 className="w-5 h-5 text-sky-600 opacity-70 group-hover:opacity-100" />
-                  </div>
-                  <span className="text-sm text-slate-700 font-bold">{item.desc}</span>
-                </button>
-              ))}
-            </div>
-          )}
+            {selectedCategory === 'daily' && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {dailyPresets.map((item, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => applyPreset(item.h, item.m)}
+                    className={`p-2.5 rounded-xl bg-sky-50/80 hover:bg-sky-100 border border-sky-200 transition flex flex-col gap-0.5 group active:scale-95 cursor-pointer shadow-2xs ${
+                      lang === 'en' ? 'text-left' : 'text-right'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-black text-slate-900 text-sm group-hover:text-sky-900">
+                        {item.label}
+                      </span>
+                      <Volume2 className="w-4 h-4 text-sky-600 opacity-70 group-hover:opacity-100" />
+                    </div>
+                    <span className="text-xs text-slate-700 font-bold">{item.desc}</span>
+                  </button>
+                ))}
+              </div>
+            )}
 
-          {selectedCategory === 'hours' && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
-              {hourPresets.map((item, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => applyPreset(item.h, item.m)}
-                  className="py-3.5 px-4 rounded-2xl bg-slate-50 hover:bg-amber-50 hover:border-amber-300 border-2 border-slate-200 text-center font-black text-base text-slate-900 hover:text-amber-900 transition active:scale-95 cursor-pointer flex items-center justify-between shadow-2xs"
-                >
-                  <span>{lang === 'en' ? `${item.label} o'clock` : `السَّاعَةُ ${item.label}`}</span>
-                  <Volume2 className="w-4 h-4 text-amber-600" />
-                </button>
-              ))}
-            </div>
-          )}
+            {selectedCategory === 'hours' && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+                {hourPresets.map((item, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => applyPreset(item.h, item.m)}
+                    className="py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-amber-50 hover:border-amber-300 border border-slate-200 text-center font-black text-xs sm:text-sm text-slate-900 hover:text-amber-900 transition active:scale-95 cursor-pointer flex items-center justify-between shadow-2xs"
+                  >
+                    <span>{lang === 'en' ? `${item.label} o'clock` : `السَّاعَةُ ${item.label}`}</span>
+                    <Volume2 className="w-3.5 h-3.5 text-amber-600" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

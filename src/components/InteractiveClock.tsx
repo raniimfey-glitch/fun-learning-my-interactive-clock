@@ -137,14 +137,18 @@ export const InteractiveClock: React.FC<InteractiveClockProps> = ({
   const ticks = Array.from({ length: 60 }, (_, i) => i);
 
   return (
-    <div className="relative select-none flex flex-col items-center justify-center p-2">
+    <div className="relative select-none flex flex-col items-center justify-center p-1 w-full max-h-full flex-1 min-h-0 overflow-hidden">
       <svg
         id="interactive-clock-svg"
         ref={svgRef}
-        width={size}
-        height={size}
         viewBox={`0 0 ${size} ${size}`}
-        className="touch-none cursor-pointer drop-shadow-xl"
+        style={{
+          width: '100%',
+          maxWidth: `${size}px`,
+          maxHeight: 'clamp(170px, 36vh, 320px)',
+          aspectRatio: '1 / 1',
+        }}
+        className="app-clock-svg touch-none cursor-pointer drop-shadow-md select-none"
         onPointerDown={handleClockFacePointerDown}
       >
         <defs>

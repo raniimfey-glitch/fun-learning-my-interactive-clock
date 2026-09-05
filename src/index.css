@@ -1,1 +1,86 @@
 @import "tailwindcss";
+
+/* 1. Strict Dynamic Viewport Height & No Scroll */
+html,
+body,
+#root {
+  height: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 2. Primary Flexbox App Wrapper */
+.app-primary-wrapper {
+  height: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 3. Header & Bottom Bar Flex-Shrink Rules */
+.app-header-top {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.app-bottom-bar {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+/* 4. Main Content Fitting Container */
+.app-main-content {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 900px;
+  overflow: hidden;
+}
+
+/* 5. Dynamic Component Scaling & Card Shrink */
+.app-game-card {
+  flex-shrink: 1;
+  min-height: 0;
+  max-height: 100%;
+}
+
+.app-clock-svg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Internal smooth scrollbar ONLY when strictly needed on ultra-short displays */
+.app-scrollable-card {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(217, 119, 6, 0.35) transparent;
+}
+
+.app-scrollable-card::-webkit-scrollbar {
+  width: 5px;
+}
+
+.app-scrollable-card::-webkit-scrollbar-thumb {
+  background-color: rgba(217, 119, 6, 0.35);
+  border-radius: 9999px;
+}
+

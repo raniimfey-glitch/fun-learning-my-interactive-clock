@@ -261,74 +261,76 @@ export const DailyRoutineMode: React.FC<DailyRoutineModeProps> = ({ onEarnStar, 
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 items-start">
+    <div className="app-game-card w-full flex-1 min-h-0 flex flex-col lg:flex-row gap-2.5 sm:gap-3.5 items-stretch overflow-hidden">
       {/* Left Column: Clock & Active Event Detail */}
-      <div className="w-full lg:w-[460px] bg-white rounded-3xl p-5 md:p-6 shadow-sm border border-slate-200/80 flex flex-col items-center">
-        <div className="w-full text-center pb-3 border-b border-slate-100 mb-3 flex items-center justify-between">
+      <div className="w-full lg:w-[380px] bg-white rounded-2xl sm:rounded-3xl p-2.5 sm:p-3.5 shadow-xs border border-slate-200/80 flex flex-col items-center justify-between shrink-0 overflow-hidden">
+        <div className="w-full pb-2 border-b border-slate-100 mb-1 flex items-center justify-between shrink-0">
           <div className={lang === 'en' ? 'text-left' : 'text-right'}>
-            <span className="text-sm font-black text-amber-800">
-              {lang === 'en' ? 'The clock shows the time for:' : 'السَّاعَةُ تُشِيرُ إِلَى وَقْتِ:'}
+            <span className="text-xs font-black text-amber-800">
+              {lang === 'en' ? 'Time for:' : 'وَقْتُ:'}
             </span>
-            <h3 className="text-xl md:text-2xl font-black text-slate-950 mt-0.5">{selectedItem.title}</h3>
+            <h3 className="text-base sm:text-lg font-black text-slate-950 mt-0.5">{selectedItem.title}</h3>
           </div>
           <button
             onClick={handleSpeakCurrent}
-            className="p-3 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-900 border-2 border-amber-200 transition cursor-pointer active:scale-95 shrink-0"
-            title={lang === 'en' ? 'Listen to spoken description' : 'اِسْتَمِعْ لِلْوَصْفِ صَوْتِيًّا'}
+            className="p-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 transition cursor-pointer active:scale-95 shrink-0"
+            title={lang === 'en' ? 'Listen to description' : 'اسْتَمِعْ لِلْوَصْفِ'}
           >
-            <Volume2 className="w-6 h-6 text-amber-600" />
+            <Volume2 className="w-4 h-4 text-amber-600" />
           </button>
         </div>
 
-        <InteractiveClock
-          hours={selectedItem.defaultHours}
-          minutes={selectedItem.defaultMinutes}
-          interactive={false}
-          showMinuteRing={true}
-          showHandLabels={true}
-          size={320}
-          lang={lang}
-        />
+        <div className="flex-1 min-h-0 w-full flex items-center justify-center overflow-hidden py-1">
+          <InteractiveClock
+            hours={selectedItem.defaultHours}
+            minutes={selectedItem.defaultMinutes}
+            interactive={false}
+            showMinuteRing={true}
+            showHandLabels={true}
+            size={320}
+            lang={lang}
+          />
+        </div>
 
         {/* Event Time Summary Card */}
-        <div className="w-full mt-4 p-5 rounded-3xl bg-amber-50/90 border-2 border-amber-300 flex flex-col gap-3">
+        <div className="w-full mt-2 p-3 rounded-2xl bg-amber-50/90 border border-amber-300 flex flex-col gap-1.5 shrink-0">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-black text-amber-950">
-              {lang === 'en' ? 'Scheduled Time:' : 'الْوَقْتُ الْمُحَدَّدُ:'}
+            <span className="text-xs font-black text-amber-950">
+              {lang === 'en' ? 'Scheduled:' : 'الْوَقْتُ:'}
             </span>
-            <span className="font-mono font-black text-base md:text-lg text-slate-950 bg-white px-3.5 py-1.5 rounded-xl border border-amber-300 shadow-xs">
+            <span className="font-mono font-black text-xs sm:text-sm text-slate-950 bg-white px-2.5 py-0.5 rounded-lg border border-amber-300 shadow-2xs">
               {digital.time12} {lang === 'en' ? digital.period12En : (digital.isPm ? 'مَسَاءً' : 'صَبَاحًا')}
             </span>
           </div>
 
-          <div className="text-lg md:text-xl font-black text-slate-950 leading-relaxed font-['Baloo_Bhaijaan_2','Tajawal',sans-serif]">
+          <div className="text-sm sm:text-base font-black text-slate-950 leading-relaxed font-['Baloo_Bhaijaan_2','Tajawal',sans-serif]">
             {spoken}
           </div>
 
-          <p className="text-base text-slate-800 leading-relaxed pt-3 border-t border-amber-200/80 font-bold">
+          <p className="text-xs sm:text-sm text-slate-800 leading-relaxed pt-1.5 border-t border-amber-200/80 font-bold line-clamp-2">
             {selectedItem.description}
           </p>
         </div>
       </div>
 
       {/* Right Column: Timeline Cards of the Day */}
-      <div className="w-full lg:flex-1 flex flex-col gap-4">
-        <div className="bg-white rounded-3xl p-4 md:p-5 shadow-sm border border-slate-200/80 flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center gap-2.5">
-            <Award className="w-6 h-6 text-amber-500" />
-            <h3 className="font-black text-slate-950 text-lg">
+      <div className="w-full lg:flex-1 min-h-0 flex flex-col gap-2 shrink-1 overflow-hidden">
+        <div className="bg-white rounded-2xl p-2.5 sm:p-3 shadow-xs border border-slate-200/80 flex items-center justify-between gap-2 shrink-0">
+          <div className="flex items-center gap-1.5">
+            <Award className="w-4 h-4 text-amber-500" />
+            <h3 className="font-black text-slate-950 text-xs sm:text-sm">
               {lang === 'en' ? "Daily Routine Schedule:" : "جَدْوَلُ أَنْشِطَةِ يَوْمِ التِّلْمِيذِ:"}
             </h3>
           </div>
-          <span className="text-sm font-black text-amber-900 bg-amber-50 border-2 border-amber-200 px-4 py-1.5 rounded-2xl">
+          <span className="text-xs font-black text-amber-900 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-xl">
             {lang === 'en'
-              ? `Explored ${completedItems.length} of ${routineItems.length} activities`
-              : `اِسْتَكْشَفْتَ ${completedItems.length} مِنْ ${routineItems.length} أَنْشِطَةٍ`}
+              ? `${completedItems.length} / ${routineItems.length}`
+              : `${completedItems.length} مِنْ ${routineItems.length}`}
           </span>
         </div>
 
         {/* List of Routine Items */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <div className="flex-1 min-h-0 overflow-y-auto app-scrollable-card grid grid-cols-1 sm:grid-cols-2 gap-2">
           {routineItems.map((item) => {
             const isSelected = item.id === selectedId;
             const isViewed = completedItems.includes(item.id);
@@ -338,32 +340,32 @@ export const DailyRoutineMode: React.FC<DailyRoutineModeProps> = ({ onEarnStar, 
               <button
                 key={item.id}
                 onClick={() => handleSelect(item)}
-                className={`p-4 md:p-5 rounded-2xl border-2 transition-all flex flex-col gap-2.5 cursor-pointer active:scale-[0.99] shadow-2xs ${
+                className={`p-2.5 sm:p-3 rounded-xl border transition-all flex flex-col gap-1 cursor-pointer active:scale-[0.99] shadow-2xs ${
                   lang === 'en' ? 'text-left' : 'text-right'
                 } ${
                   isSelected
-                    ? 'bg-amber-50/95 border-amber-500 shadow-md ring-2 ring-amber-200'
+                    ? 'bg-amber-50/95 border-amber-500 shadow-2xs ring-1 ring-amber-200'
                     : isViewed
                     ? 'bg-white hover:bg-slate-50 border-slate-200 text-slate-900'
                     : 'bg-white hover:bg-slate-50 border-slate-200/70 text-slate-800'
                 }`}
               >
                 <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2.5 rounded-xl bg-slate-100">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 rounded-lg bg-slate-100">
                       {renderIcon(item.iconName)}
                     </div>
-                    <span className="font-black text-base md:text-lg text-slate-950">
+                    <span className="font-black text-xs sm:text-sm text-slate-950 truncate">
                       {item.title}
                     </span>
                   </div>
 
-                  <span className="font-mono text-sm font-black px-3 py-1 rounded-xl bg-slate-100 text-slate-900 border border-slate-200">
+                  <span className="font-mono text-xs font-black px-2 py-0.5 rounded-lg bg-slate-100 text-slate-900 border border-slate-200">
                     {itemDig.time12} {lang === 'en' ? itemDig.period12En : itemDig.period12}
                   </span>
                 </div>
 
-                <div className="text-sm text-slate-700 line-clamp-2 pr-1 font-bold leading-relaxed">
+                <div className="text-xs text-slate-700 line-clamp-2 pr-0.5 font-bold leading-relaxed">
                   {item.description}
                 </div>
               </button>
