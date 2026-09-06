@@ -192,7 +192,7 @@ export const SetClockGame: React.FC<SetClockGameProps> = ({
               if (feedback !== 'idle') setFeedback('idle');
             }}
             showMinuteRing={true}
-            showHandLabels={true}
+            showHandLabels={false}
             highlightTarget={showHint && currentChallenge ? { hours: currentChallenge.hours, minutes: currentChallenge.minutes } : null}
             size={320}
             lang={lang}

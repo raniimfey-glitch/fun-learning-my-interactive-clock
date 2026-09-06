@@ -105,15 +105,6 @@ export const LearnGuideView: React.FC<LearnGuideViewProps> = ({ onBackToHome, la
                   </p>
                 </div>
               </div>
-            </div>
-          )}
-                  <p className="text-base text-slate-800 leading-relaxed font-bold">
-                    {lang === 'en'
-                      ? "This is the longer hand. It points to the minutes. When it points at 12, it is o'clock. When it points at 6, it is half past."
-                      : 'هُوَ الْعَقْرَبُ الْأَطْوَلُ وَالْأَنْحَفُ، وَيُشِيرُ إِلَى عَدَدِ الدَّقَائِقِ. عِنْدَمَا يُشِيرُ إِلَى الرَّقْمِ 12 تَكُونُ السَّاعَةُ تَمَامًا، وَعِنْدَمَا يُشِيرُ إِلَى 6 تَكُونُ السَّاعَةُ وَالنِّصْفَ.'}
-                  </p>
-                </div>
-              </div>
 
               <div className="p-5 rounded-3xl bg-amber-50 border-2 border-amber-200 flex items-center gap-3">
                 <span className="text-3xl">💡</span>

@@ -1,14 +1,14 @@
 import React from 'react';
 import { AppMode, Language } from '../types';
-import { BookOpen, Clock, Gamepad2, HelpCircle, Calendar, Volume2, VolumeX, Star, ArrowRight, ArrowLeft, Languages } from 'lucide-react';
+import { BookOpen, Clock, Gamepad2, HelpCircle, Calendar, ArrowRight, ArrowLeft, Languages } from 'lucide-react';
 import { sounds } from '../utils/soundEffects';
 
 interface HeaderProps {
   currentMode: AppMode;
   onBackToHome: () => void;
-  starsCount: number;
-  soundEnabled: boolean;
-  onToggleSound: () => void;
+  starsCount?: number;
+  soundEnabled?: boolean;
+  onToggleSound?: () => void;
   lang: Language;
   onToggleLang: () => void;
 }
@@ -16,9 +16,6 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   currentMode,
   onBackToHome,
-  starsCount,
-  soundEnabled,
-  onToggleSound,
   lang,
   onToggleLang,
 }) => {
@@ -78,7 +75,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         )}
 
-        {/* Right Side: Essential Utilities (Language + Sound + Stars) */}
+        {/* Right Side: Essential Utilities (Language) */}
         <div className="flex items-center gap-2 sm:gap-2.5">
           {/* Language Switcher (العربية / English) */}
           <button
@@ -93,34 +90,6 @@ export const Header: React.FC<HeaderProps> = ({
             <Languages className="w-4 h-4 text-amber-600" />
             <span>{lang === 'en' ? 'العربية' : 'English'}</span>
           </button>
-
-          {/* Sound Toggle */}
-          <button
-            type="button"
-            onClick={onToggleSound}
-            className={`p-2.5 rounded-2xl border-2 transition cursor-pointer active:scale-95 ${
-              soundEnabled
-                ? 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100'
-                : 'bg-slate-100 text-slate-500 border-slate-300'
-            }`}
-            title={
-              soundEnabled
-                ? lang === 'en' ? 'Mute sound' : 'كَتْمُ الصَّوْتِ'
-                : lang === 'en' ? 'Enable sound' : 'تَشْغِيلُ الصَّوْتِ'
-            }
-          >
-            {soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5 text-slate-400" />}
-          </button>
-
-          {/* Stars Counter */}
-          <div className="flex items-center gap-2 bg-amber-500 text-white px-3.5 sm:px-4 py-2 rounded-2xl shadow-sm text-sm sm:text-base font-black border border-amber-600">
-            <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-white text-white animate-bounce" />
-            <span>
-              {lang === 'en'
-                ? `${starsCount} ${starsCount === 1 ? 'Star' : 'Stars'}`
-                : `${starsCount} ${starsCount === 1 ? 'نَجْمَةٌ' : starsCount === 2 ? 'نَجْمَتَانِ' : starsCount <= 10 ? 'نُجُومٍ' : 'نَجْمَةً'}`}
-            </span>
-          </div>
         </div>
       </div>
     </header>

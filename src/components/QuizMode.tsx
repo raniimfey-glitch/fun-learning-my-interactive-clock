@@ -226,7 +226,7 @@ export const QuizMode: React.FC<QuizModeProps> = ({
               minutes={currentQuestion.targetMinutes}
               interactive={false}
               showMinuteRing={selectedLevel === 3}
-              showHandLabels={true}
+              showHandLabels={false}
               size={320}
               lang={lang}
             />

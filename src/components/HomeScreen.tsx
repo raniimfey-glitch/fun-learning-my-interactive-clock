@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppMode, Language } from '../types';
-import { BookOpen, Clock, Gamepad2, HelpCircle, Calendar, Sparkles } from 'lucide-react';
+import { BookOpen, Clock, Gamepad2, HelpCircle, Calendar } from 'lucide-react';
 import { sounds } from '../utils/soundEffects';
 
 interface HomeScreenProps {
@@ -78,12 +78,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
   return (
     <div className="flex-1 min-h-0 w-full flex flex-col justify-center items-center py-2 px-2 overflow-hidden">
-      {/* Visual Welcome Emblem */}
+      {/* Visual Welcome Header */}
       <div className="flex flex-col items-center text-center mb-3 sm:mb-4 shrink-0">
-        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-amber-100/90 border border-amber-300 text-amber-950 text-xs sm:text-sm font-black shadow-2xs mb-1.5">
-          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-          <span>{lang === 'en' ? 'Fun Learning - Ranim Fay' : '✨️ التّعلّم الممتِع - رنيم فاي ✨️'}</span>
-        </div>
         <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-800 tracking-tight">
           {lang === 'en' ? 'Select an Activity:' : 'اخْتَرْ نَشَاطًا:'}
         </h2>
