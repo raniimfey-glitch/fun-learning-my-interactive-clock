@@ -67,7 +67,7 @@ export const DigitalDisplay: React.FC<DigitalDisplayProps> = ({
           ? 'وَخَمْسٌ وَأَرْبَعُونَ دَقِيقَةً'
           : `وَ ${digital.min} دَقِيقَةً`;
       const periodWord = digital.isPm ? 'مَسَاءً' : 'صَبَاحًا';
-      const text = `السَّاعَةُ بِالرَّقِيمَاتِ: ${getArabicHourName(digital.h12, true)} ${minWord} ${periodWord}`;
+      const text = `تُشِيرُ السَّاعَةُ إِلَى ${getArabicHourName(digital.h12, true)} ${minWord} ${periodWord}`;
       sounds.speakArabic(text, () => {
         setIsSpeakingDigital(false);
       });
@@ -113,12 +113,12 @@ export const DigitalDisplay: React.FC<DigitalDisplayProps> = ({
 
   return (
     <div className="w-full bg-white rounded-2xl sm:rounded-3xl p-2.5 sm:p-3.5 shadow-xs border border-slate-200/80 flex flex-col justify-between flex-1 min-h-0 overflow-y-auto app-scrollable-card gap-2 sm:gap-2.5">
-      {/* 1. Prominent Digital Clock Card (بطاقة الساعة المكتوبة بالرقيمات) with Engine Read Button */}
+      {/* 1. Prominent Digital Clock Card with Engine Read Button */}
       <div className="flex flex-col sm:flex-row items-center justify-between p-3 sm:p-4 bg-slate-950 text-white rounded-2xl shadow-inner border border-slate-800 gap-3 shrink-0">
         <div className="flex flex-col items-center sm:items-start">
           <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-amber-300 font-bold mb-1">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>{lang === 'en' ? 'DIGITAL CLOCK (DIGITS)' : 'السَّاعَةُ بِالرَّقِيمَاتِ (رَقَمِيَّةٌ)'}</span>
+            <span>{lang === 'en' ? 'DIGITAL CLOCK' : 'السَّاعَةُ الرَّقَمِيَّةُ'}</span>
           </div>
 
           <div className="flex items-baseline gap-2.5 font-mono">
@@ -143,7 +143,7 @@ export const DigitalDisplay: React.FC<DigitalDisplayProps> = ({
               ? 'bg-amber-400 text-slate-950 animate-pulse ring-2 ring-amber-300'
               : 'bg-amber-500 hover:bg-amber-400 text-slate-950'
           }`}
-          title={lang === 'en' ? 'Read by speech engine' : 'قِرَاءَةُ الرَّقِيمَاتِ مِنَ الْمُحَرِّكِ'}
+          title={lang === 'en' ? 'Read by speech engine' : 'قِرَاءَةُ السَّاعَةِ مِنَ الْمُحَرِّكِ'}
         >
           <Volume2 className={`w-4 h-4 ${isSpeakingDigital ? 'animate-bounce' : ''}`} />
           <span>

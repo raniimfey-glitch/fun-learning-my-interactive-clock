@@ -4,7 +4,7 @@ import { InteractiveClock } from './InteractiveClock';
 import { sounds } from '../utils/soundEffects';
 import { formatArabicSpokenTime, formatEnglishSpokenTime } from '../utils/timeFormatters';
 import { QuizQuestion, Language } from '../types';
-import { Star, CheckCircle, XCircle, ArrowLeft, ArrowRight, RotateCcw, HelpCircle, Volume2 } from 'lucide-react';
+import { CheckCircle, XCircle, ArrowLeft, ArrowRight, HelpCircle, Volume2 } from 'lucide-react';
 
 interface QuizModeProps {
   onEarnStar: () => void;
@@ -23,9 +23,7 @@ export const QuizMode: React.FC<QuizModeProps> = ({
   const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion | null>(null);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
-  const [score, setScore] = useState<number>(0);
   const [questionCount, setQuestionCount] = useState<number>(0);
-  const [streak, setStreak] = useState<number>(0);
 
   const generateQuizQuestion = useCallback((lvl: number, currentLang: Language): QuizQuestion => {
     const id = `q-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`;
@@ -168,8 +166,6 @@ export const QuizMode: React.FC<QuizModeProps> = ({
     setQuestionCount((c) => c + 1);
 
     if (isCorrect) {
-      setScore((s) => s + 10);
-      setStreak((st) => st + 1);
       sounds.playCorrect();
       sounds.speakCheer(true, currentLang);
       onEarnStar();
@@ -184,7 +180,6 @@ export const QuizMode: React.FC<QuizModeProps> = ({
         // Fallback
       }
     } else {
-      setStreak(0);
       sounds.playWrong();
       sounds.speakCheer(false, currentLang);
     }
@@ -267,36 +262,13 @@ export const QuizMode: React.FC<QuizModeProps> = ({
       </div>
 
       {/* Right Column: Multiple Choice Options & Explanation */}
-      <div className="w-full md:flex-1 min-h-0 flex flex-col gap-2 shrink-1 overflow-hidden">
-        {/* Header Stats */}
-        <div className="bg-white rounded-2xl p-2 sm:p-2.5 shadow-xs border border-slate-200/80 flex items-center justify-between gap-2 shrink-0">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1.5 bg-amber-50 text-amber-900 px-3 py-1 rounded-xl border border-amber-200 text-xs sm:text-sm font-black">
-              <Star className="w-4 h-4 fill-amber-400 text-amber-500" />
-              <span>{lang === 'en' ? `Score: ${score}` : `النِّقَاطُ: ${score}`}</span>
-            </div>
-            {streak > 1 && (
-              <div className="flex items-center gap-1.5 bg-emerald-50 text-emerald-900 px-2.5 py-1 rounded-xl border border-emerald-200 text-xs font-black animate-pulse">
-                <span>{streak} 🔥</span>
-              </div>
-            )}
-          </div>
-
-          <button
-            onClick={nextQuestion}
-            className="flex items-center gap-1.5 text-xs font-black text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-xl transition active:scale-95 cursor-pointer border border-slate-200"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>{lang === 'en' ? 'Skip' : 'تَخَطَّ'}</span>
-          </button>
-        </div>
-
+      <div className="w-full md:flex-1 min-h-0 flex flex-col shrink-1 overflow-hidden">
         {/* Question & Options */}
         {currentQuestion && (
-          <div className="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xs border border-slate-200/80 flex-1 min-h-0 flex flex-col justify-between overflow-y-auto app-scrollable-card">
-            <div className="flex flex-col gap-2.5">
-              <div className="flex items-center justify-between gap-2 shrink-0">
-                <h3 className="text-sm sm:text-base md:text-lg font-black text-slate-950 flex items-center gap-1.5">
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-xs border border-slate-200/80 flex-1 min-h-0 flex flex-col justify-between overflow-y-auto app-scrollable-card">
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between gap-2 shrink-0 pb-1 border-b border-slate-100">
+                <h3 className="text-sm sm:text-base md:text-lg font-black text-slate-950 flex items-center gap-2">
                   <HelpCircle className="w-5 h-5 text-amber-600 shrink-0" />
                   <span>{currentQuestion.questionPrompt}</span>
                 </h3>
@@ -316,9 +288,9 @@ export const QuizMode: React.FC<QuizModeProps> = ({
                 </button>
               </div>
 
-              {/* Exactly 2 Options: Both clearly visible on the screen */}
-              <div className="grid grid-cols-1 gap-2.5 pt-1">
-                {currentQuestion.options.map((opt, idx) => {
+              {/* Exactly 2 Options: Both clearly visible directly without letter badges */}
+              <div className="grid grid-cols-1 gap-3 pt-1">
+                {currentQuestion.options.map((opt) => {
                   let containerClass = 'bg-slate-50 hover:bg-amber-50/60 border-slate-200 hover:border-amber-400 text-slate-900';
                   let icon = null;
 
@@ -334,12 +306,10 @@ export const QuizMode: React.FC<QuizModeProps> = ({
                     }
                   }
 
-                  const badgeLetter = lang === 'en' ? (idx === 0 ? 'A' : 'B') : (idx === 0 ? 'أ' : 'ب');
-
                   return (
                     <div
                       key={opt.id}
-                      className={`p-2 rounded-2xl border-2 transition-all flex items-center gap-2 shadow-2xs ${containerClass}`}
+                      className={`p-2.5 sm:p-3 rounded-2xl border-2 transition-all flex items-center gap-2.5 shadow-2xs ${containerClass}`}
                     >
                       <button
                         type="button"
@@ -354,18 +324,13 @@ export const QuizMode: React.FC<QuizModeProps> = ({
                         type="button"
                         onClick={() => handleSelectOption(opt.id, opt.isCorrect)}
                         disabled={isAnswered}
-                        className={`flex-1 py-2 sm:py-2.5 px-2 flex items-center justify-between gap-2.5 cursor-pointer disabled:cursor-default transition active:scale-[0.99] ${
+                        className={`flex-1 py-2 px-2.5 flex items-center justify-between gap-2.5 cursor-pointer disabled:cursor-default transition active:scale-[0.99] ${
                           lang === 'en' ? 'text-left' : 'text-right'
                         }`}
                       >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <span className="w-7 h-7 rounded-lg bg-amber-100 text-amber-900 border border-amber-300 flex items-center justify-center font-black text-xs sm:text-sm shrink-0">
-                            {badgeLetter}
-                          </span>
-                          <span className="font-black text-sm sm:text-base md:text-lg leading-relaxed truncate sm:text-wrap">
-                            {opt.text}
-                          </span>
-                        </div>
+                        <span className="font-black text-sm sm:text-base md:text-lg leading-relaxed text-slate-950">
+                          {opt.text}
+                        </span>
                         {icon}
                       </button>
                     </div>
