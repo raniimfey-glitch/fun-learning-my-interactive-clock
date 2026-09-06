@@ -46,8 +46,8 @@ export const SetClockGame: React.FC<SetClockGameProps> = ({
       // Level 1: On the hour (00) & half past (30)
       m = Math.random() > 0.5 ? 0 : 30;
     } else if (currentLevel === 2) {
-      // Level 2: Quarters (00, 15, 30, 45)
-      const minOptions = [0, 15, 30, 45];
+      // Level 2: Quarters ONLY (15, 45) - strictly "ربع وإلا ربع", removing 0 (تماماً) and 30 (النصف)
+      const minOptions = [15, 45];
       m = minOptions[Math.floor(Math.random() * minOptions.length)];
     } else {
       // Level 3: 5-minute multiples & thirds (05, 10, 15, 20, 30, 40, 45, 50)
@@ -215,6 +215,7 @@ export const SetClockGame: React.FC<SetClockGameProps> = ({
                 onClick={() => {
                   sounds.playClick();
                   setLevel(lvl.id);
+                  loadNewChallenge(lvl.id);
                 }}
                 className={`py-2 px-1.5 rounded-xl transition text-center active:scale-95 cursor-pointer border ${
                   level === lvl.id

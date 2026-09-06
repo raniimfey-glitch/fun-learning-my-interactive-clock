@@ -4,7 +4,7 @@ import { InteractiveClock } from './InteractiveClock';
 import { sounds } from '../utils/soundEffects';
 import { formatArabicSpokenTime, formatEnglishSpokenTime } from '../utils/timeFormatters';
 import { QuizQuestion, Language } from '../types';
-import { CheckCircle, XCircle, ArrowLeft, ArrowRight, HelpCircle, Volume2 } from 'lucide-react';
+import { CheckCircle, XCircle, ArrowLeft, ArrowRight, HelpCircle, Volume2, RotateCcw } from 'lucide-react';
 
 interface QuizModeProps {
   onEarnStar: () => void;
@@ -23,7 +23,6 @@ export const QuizMode: React.FC<QuizModeProps> = ({
   const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion | null>(null);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
-  const [questionCount, setQuestionCount] = useState<number>(0);
 
   const generateQuizQuestion = useCallback((lvl: number, currentLang: Language): QuizQuestion => {
     const id = `q-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`;
@@ -34,12 +33,12 @@ export const QuizMode: React.FC<QuizModeProps> = ({
       // Level 1: On the hour (00) or half past (30)
       m = Math.random() > 0.5 ? 0 : 30;
     } else if (lvl === 2) {
-      // Level 2: Quarters (00, 15, 30, 45)
-      const options = [0, 15, 30, 45];
+      // Level 2: Quarters ONLY (15, 45) - strictly "ربع وإلا ربع", no 0 (تماماً) or 30 (نصف)
+      const options = [15, 45];
       m = options[Math.floor(Math.random() * options.length)];
     } else {
       // Level 3: 5-minute increments & thirds
-      const options = [5, 10, 15, 20, 30, 40, 45, 50];
+      const options = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
       m = options[Math.floor(Math.random() * options.length)];
     }
 
@@ -51,8 +50,8 @@ export const QuizMode: React.FC<QuizModeProps> = ({
       const wrongH1 = (h % 12) + 1;
       distractors.push(formatEnglishSpokenTime(wrongH1, m, false));
 
-      const diffMinutes = [0, 15, 30, 45, 20].filter((min) => min !== m);
-      const wrongM = diffMinutes[Math.floor(Math.random() * diffMinutes.length)] || (m === 0 ? 30 : 0);
+      const diffMinutes = (lvl === 2 ? [15, 45] : [0, 15, 30, 45, 20]).filter((min) => min !== m);
+      const wrongM = diffMinutes[Math.floor(Math.random() * diffMinutes.length)] || (m === 15 ? 45 : 15);
       distractors.push(formatEnglishSpokenTime(h, wrongM, false));
 
       const wrongH3 = (h + 2) % 12 || 12;
@@ -101,8 +100,8 @@ export const QuizMode: React.FC<QuizModeProps> = ({
     distractors.push(formatArabicSpokenTime(wrongH1, m, false, false));
 
     // Distractor 2: Different minute fraction with same hour
-    const diffMinutes = [0, 15, 30, 45, 20].filter((min) => min !== m);
-    const wrongM = diffMinutes[Math.floor(Math.random() * diffMinutes.length)] || (m === 0 ? 30 : 0);
+    const diffMinutes = (lvl === 2 ? [15, 45] : [0, 15, 30, 45, 20]).filter((min) => min !== m);
+    const wrongM = diffMinutes[Math.floor(Math.random() * diffMinutes.length)] || (m === 15 ? 45 : 15);
     distractors.push(formatArabicSpokenTime(h, wrongM, false, false));
 
     // Distractor 3: Hour & fraction shift
@@ -142,8 +141,9 @@ export const QuizMode: React.FC<QuizModeProps> = ({
     };
   }, []);
 
-  const nextQuestion = useCallback(() => {
-    const q = generateQuizQuestion(selectedLevel, currentLang);
+  const nextQuestion = useCallback((targetLvl?: number) => {
+    const lvlToUse = targetLvl !== undefined ? targetLvl : selectedLevel;
+    const q = generateQuizQuestion(lvlToUse, currentLang);
     setCurrentQuestion(q);
     setSelectedOptionId(null);
     setIsAnswered(false);
@@ -163,7 +163,6 @@ export const QuizMode: React.FC<QuizModeProps> = ({
     if (isAnswered) return;
     setSelectedOptionId(optionId);
     setIsAnswered(true);
-    setQuestionCount((c) => c + 1);
 
     if (isCorrect) {
       sounds.playCorrect();
@@ -212,9 +211,15 @@ export const QuizMode: React.FC<QuizModeProps> = ({
           <span className="text-amber-800 truncate">
             {lang === 'en' ? 'Look at clock hands ⏱️' : 'اُنْظُرْ إِلَى عَقَارِبِ السَّاعَةِ ⏱️'}
           </span>
-          <span className="bg-amber-100 text-amber-900 px-2 py-0.5 rounded-lg font-black border border-amber-300 text-xs">
-            {lang === 'en' ? `#${questionCount + 1}` : `سُؤَالٌ ${questionCount + 1}`}
-          </span>
+          <button
+            id="quiz-another-question-btn"
+            onClick={() => nextQuestion()}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs sm:text-sm shadow-xs transition active:scale-95 cursor-pointer border border-amber-600"
+            title={lang === 'en' ? 'Another Question' : 'سُؤَالٌ آخَرُ'}
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>{lang === 'en' ? 'Another Question' : 'سُؤَالٌ آخَرُ'}</span>
+          </button>
         </div>
 
         <div className="flex-1 min-h-0 w-full flex items-center justify-center overflow-hidden py-1">
@@ -247,6 +252,7 @@ export const QuizMode: React.FC<QuizModeProps> = ({
                 onClick={() => {
                   sounds.playClick();
                   setSelectedLevel(lvl.id);
+                  nextQuestion(lvl.id);
                 }}
                 className={`py-2 px-1 rounded-xl transition text-center active:scale-95 cursor-pointer border ${
                   selectedLevel === lvl.id
