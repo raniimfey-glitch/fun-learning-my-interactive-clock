@@ -27,52 +27,39 @@ export const DigitalDisplay: React.FC<DigitalDisplayProps> = ({
 }) => {
   const currentLang: Language = lang || 'en';
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [isSpeakingDigital, setIsSpeakingDigital] = useState(false);
   const digital = formatDigitalTime(hours, minutes, seconds);
   const periodInfo = getPeriodOfDay(hours, currentLang);
   const spokenPhrase = formatSpokenTime(hours, minutes, currentLang, true, false);
-  const phoneticArabic = formatArabicSpokenTime(hours, minutes, true, true);
 
-  const handleSpeak = () => {
+  const handleReadClock = () => {
+    if (isSpeaking) return;
     setIsSpeaking(true);
-    if (currentLang === 'en') {
-      sounds.speakEnglish(spokenPhrase, () => {
-        setIsSpeaking(false);
-      });
-    } else {
-      sounds.speakArabic(phoneticArabic, () => {
-        setIsSpeaking(false);
-      });
-    }
-    setTimeout(() => setIsSpeaking(false), 3000);
-  };
+    sounds.playClick();
 
-  const handleSpeakDigital = () => {
-    setIsSpeakingDigital(true);
     if (currentLang === 'en') {
       const minText = digital.min === 0 ? "o'clock" : digital.min < 10 ? `oh ${digital.min}` : `${digital.min}`;
-      const text = `Digital time: ${digital.h12} ${minText} ${digital.period12En}`;
+      const text = `The time is ${digital.h12} ${minText} ${digital.period12En}`;
       sounds.speakEnglish(text, () => {
-        setIsSpeakingDigital(false);
+        setIsSpeaking(false);
       });
     } else {
       const minWord =
         digital.min === 0
           ? 'تَمَامًا'
           : digital.min === 15
-          ? 'وَخَمْسَ عَشْرَةَ دَقِيقَةً'
+          ? 'وَالرُّبْعُ'
           : digital.min === 30
-          ? 'وَثَلَاثُونَ دَقِيقَةً'
+          ? 'وَالنِّصْفُ'
           : digital.min === 45
-          ? 'وَخَمْسٌ وَأَرْبَعُونَ دَقِيقَةً'
+          ? 'إِلَّا رُبْعًا'
           : `وَ ${digital.min} دَقِيقَةً`;
       const periodWord = digital.isPm ? 'مَسَاءً' : 'صَبَاحًا';
       const text = `تُشِيرُ السَّاعَةُ إِلَى ${getArabicHourName(digital.h12, true)} ${minWord} ${periodWord}`;
       sounds.speakArabic(text, () => {
-        setIsSpeakingDigital(false);
+        setIsSpeaking(false);
       });
     }
-    setTimeout(() => setIsSpeakingDigital(false), 3000);
+    setTimeout(() => setIsSpeaking(false), 3200);
   };
 
   const adjustHours = (delta: number) => {
@@ -113,74 +100,34 @@ export const DigitalDisplay: React.FC<DigitalDisplayProps> = ({
 
   return (
     <div className="w-full bg-white rounded-2xl sm:rounded-3xl p-2.5 sm:p-3.5 shadow-xs border border-slate-200/80 flex flex-col justify-between flex-1 min-h-0 overflow-y-auto app-scrollable-card gap-2 sm:gap-2.5">
-      {/* 1. Prominent Digital Clock Card with Engine Read Button */}
-      <div className="flex flex-col sm:flex-row items-center justify-between p-3 sm:p-4 bg-slate-950 text-white rounded-2xl shadow-inner border border-slate-800 gap-3 shrink-0">
-        <div className="flex flex-col items-center sm:items-start">
-          <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-amber-300 font-bold mb-1">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>{lang === 'en' ? 'DIGITAL CLOCK' : 'السَّاعَةُ الرَّقَمِيَّةُ'}</span>
-          </div>
-
-          <div className="flex items-baseline gap-2.5 font-mono">
-            {/* Main Digits */}
-            <div className="text-3xl sm:text-4xl md:text-5xl font-black tracking-wider text-amber-400 drop-shadow">
-              {digital.time12}
-            </div>
-
-            {/* AM / PM indicator */}
-            <div className="text-xs sm:text-sm font-black px-2.5 py-1 rounded-lg bg-slate-800 text-amber-300 border border-slate-700">
-              {lang === 'en' ? digital.period12En : (digital.isPm ? 'مَسَاءً (م)' : 'صَبَاحًا (ص)')}
-            </div>
-          </div>
-        </div>
-
-        {/* Read Digital Engine Button */}
-        <button
-          id="read-digital-engine-btn"
-          onClick={handleSpeakDigital}
-          className={`flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-black transition-all shadow-xs active:scale-95 shrink-0 cursor-pointer ${
-            isSpeakingDigital
-              ? 'bg-amber-400 text-slate-950 animate-pulse ring-2 ring-amber-300'
-              : 'bg-amber-500 hover:bg-amber-400 text-slate-950'
-          }`}
-          title={lang === 'en' ? 'Read by speech engine' : 'قِرَاءَةُ السَّاعَةِ مِنَ الْمُحَرِّكِ'}
-        >
-          <Volume2 className={`w-4 h-4 ${isSpeakingDigital ? 'animate-bounce' : ''}`} />
-          <span>
-            {isSpeakingDigital
-              ? (lang === 'en' ? 'Reading...' : 'جَارٍ قِرَاءَتُهُ...')
-              : (lang === 'en' ? 'Read by Engine 🔊' : 'قِرَاءَةٌ مِنَ الْمُحَرِّكِ 🔊')}
-          </span>
-        </button>
-      </div>
-
-      {/* 2. Spoken Time Box with Diacritics & TTS */}
-      <div className="bg-amber-50/90 border border-amber-300 rounded-2xl p-2.5 sm:p-3 flex flex-col sm:flex-row items-center justify-between gap-2.5 shadow-2xs shrink-0">
+      {/* 1. Spoken Time Card with Prominent Read Clock Button (بدون كلمة المحرك) */}
+      <div className="bg-amber-50/90 border border-amber-300 rounded-2xl p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-2xs shrink-0">
         <div className={`flex-1 text-center ${lang === 'en' ? 'sm:text-left' : 'sm:text-right'}`}>
-          <div className="text-xs font-black text-amber-900 mb-0.5 flex items-center justify-center sm:justify-start gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-            <span>{lang === 'en' ? 'HOW TO SAY THE TIME (WORDS):' : 'نُطْقُ وَقِرَاءَةُ السَّاعَةِ (بِالْكَلِمَاتِ):'}</span>
+          <div className="text-xs font-black text-amber-900 mb-1 flex items-center justify-center sm:justify-start gap-1.5 flex-wrap">
+            <Sparkles className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+            <span>{lang === 'en' ? 'HOW TO SAY & READ THE TIME:' : 'نُطْقُ وَقِرَاءَةُ السَّاعَةِ (بِالْكَلِمَاتِ):'}</span>
           </div>
-          <div className="text-base sm:text-lg md:text-xl font-black text-slate-950 leading-relaxed font-['Baloo_Bhaijaan_2','Tajawal',sans-serif]">
+          <div className="text-lg sm:text-xl md:text-2xl font-black text-slate-950 leading-relaxed font-['Baloo_Bhaijaan_2','Tajawal',sans-serif]">
             {spokenPhrase}
           </div>
         </div>
 
+        {/* زر قراءة الساعة - واضح ومميز وبدون كلمة المحرك */}
         <button
-          id="listen-spoken-time-btn"
-          onClick={handleSpeak}
-          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black transition-all shadow-xs active:scale-95 shrink-0 cursor-pointer ${
+          id="read-clock-btn"
+          onClick={handleReadClock}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-black transition-all shadow-xs active:scale-95 shrink-0 cursor-pointer ${
             isSpeaking
               ? 'bg-amber-500 text-white animate-pulse ring-2 ring-amber-300'
               : 'bg-amber-600 hover:bg-amber-700 text-white'
           }`}
-          title={lang === 'en' ? 'Listen to pronunciation' : 'اِسْتَمِعْ لِنُطْقِ السَّاعَةِ'}
+          title={lang === 'en' ? 'Read Clock' : 'قِرَاءَةُ السَّاعَةِ'}
         >
           <Volume2 className={`w-4 h-4 ${isSpeaking ? 'animate-bounce' : ''}`} />
           <span>
             {isSpeaking
-              ? (lang === 'en' ? 'Speaking...' : 'جَارٍ النُّطْقُ...')
-              : (lang === 'en' ? 'Listen 🔊' : 'اِسْتَمِعْ 🔊')}
+              ? (lang === 'en' ? 'Reading...' : 'جَارٍ الْقِرَاءَةُ...')
+              : (lang === 'en' ? 'Read Clock 🔊' : 'قِرَاءَةُ السَّاعَةِ 🔊')}
           </span>
         </button>
       </div>

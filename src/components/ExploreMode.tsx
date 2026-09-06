@@ -4,6 +4,7 @@ import { DigitalDisplay } from './DigitalDisplay';
 import { ClockSettings, Language } from '../types';
 import { Clock, Sparkles } from 'lucide-react';
 import { sounds } from '../utils/soundEffects';
+import { getArabicHourName } from '../utils/timeFormatters';
 
 interface ExploreModeProps {
   hours: number;
@@ -24,6 +25,28 @@ export const ExploreMode: React.FC<ExploreModeProps> = ({
   onUpdateSettings,
   lang = 'en',
 }) => {
+  const handleReadClock = () => {
+    sounds.playClick();
+    const h12 = hours % 12 || 12;
+    const isPm = hours >= 12;
+    if (lang === 'en') {
+      const minText = minutes === 0 ? "o'clock" : minutes < 10 ? `oh ${minutes}` : `${minutes}`;
+      sounds.speakEnglish(`The time is ${h12} ${minText} ${isPm ? 'PM' : 'AM'}`);
+    } else {
+      const minWord =
+        minutes === 0
+          ? 'تَمَامًا'
+          : minutes === 15
+          ? 'وَالرُّبْعُ'
+          : minutes === 30
+          ? 'وَالنِّصْفُ'
+          : minutes === 45
+          ? 'إِلَّا رُبْعًا'
+          : `وَ ${minutes} دَقِيقَةً`;
+      const periodWord = isPm ? 'مَسَاءً' : 'صَبَاحًا';
+      sounds.speakArabic(`تُشِيرُ السَّاعَةُ إِلَى ${getArabicHourName(h12, true)} ${minWord} ${periodWord}`);
+    }
+  };
   return (
     <div className="app-game-card w-full flex-1 min-h-0 flex flex-col md:flex-row gap-2.5 sm:gap-3.5 items-stretch overflow-hidden">
       {/* Left Column: The Interactive Clock Face */}
@@ -71,6 +94,7 @@ export const ExploreMode: React.FC<ExploreModeProps> = ({
             showHandLabels={true}
             size={290}
             lang={lang}
+            onReadClock={handleReadClock}
           />
         </div>
       </div>
