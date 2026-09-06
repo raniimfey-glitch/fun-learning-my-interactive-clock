@@ -25,16 +25,16 @@ export const ExploreMode: React.FC<ExploreModeProps> = ({
   lang = 'en',
 }) => {
   return (
-    <div className="app-game-card w-full flex-1 min-h-0 flex flex-col lg:flex-row gap-2.5 sm:gap-3.5 items-stretch overflow-hidden">
+    <div className="app-game-card w-full flex-1 min-h-0 flex flex-col md:flex-row gap-2.5 sm:gap-3.5 items-stretch overflow-hidden">
       {/* Left Column: The Interactive Clock Face */}
-      <div className="w-full lg:w-[420px] bg-white rounded-2xl sm:rounded-3xl p-2.5 sm:p-3.5 shadow-xs border border-slate-200/80 flex flex-col items-center justify-between shrink-0 overflow-hidden">
+      <div className="w-full md:w-[340px] lg:w-[380px] bg-white rounded-2xl sm:rounded-3xl p-2.5 sm:p-3 shadow-xs border border-slate-200/80 flex flex-col items-center justify-between shrink-0 overflow-hidden">
         {/* Helper Note for Kids & Live Time Toggle */}
         <div className="w-full flex items-center justify-between text-xs sm:text-sm font-black text-slate-700 mb-1 px-1 shrink-0">
           <span className="flex items-center gap-1.5 text-amber-800 truncate">
             <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
             <span className="truncate">
               {lang === 'en'
-                ? 'Drag the hands directly:'
+                ? 'Drag hands directly:'
                 : 'حَرِّكِ الْعَقَارِبَ مُبَاشَرَةً:'}
             </span>
           </span>
@@ -69,14 +69,14 @@ export const ExploreMode: React.FC<ExploreModeProps> = ({
             showMinuteRing={false}
             showFractionsOverlay={false}
             showHandLabels={true}
-            size={360}
+            size={290}
             lang={lang}
           />
         </div>
       </div>
 
       {/* Right Column: Digital Display & Step Controls */}
-      <div className="w-full lg:flex-1 min-h-0 flex flex-col shrink-1 overflow-hidden">
+      <div className="w-full md:flex-1 min-h-0 flex flex-col shrink-1 overflow-hidden">
         <DigitalDisplay
           hours={hours}
           minutes={minutes}
