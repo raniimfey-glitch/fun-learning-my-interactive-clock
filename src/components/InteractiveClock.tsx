@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { getClockAngles, angleToMinutes, angleToHour } from '../utils/timeFormatters';
 import { sounds } from '../utils/soundEffects';
-import { Volume2 } from 'lucide-react';
+import { Volume2, Clock } from 'lucide-react';
 
 interface InteractiveClockProps {
   hours: number; // 0-23
@@ -16,6 +16,8 @@ interface InteractiveClockProps {
   highlightTarget?: { hours: number; minutes: number } | null;
   lang?: 'en' | 'ar';
   onReadClock?: () => void;
+  isLiveTime?: boolean;
+  onToggleLiveTime?: () => void;
 }
 
 export const InteractiveClock: React.FC<InteractiveClockProps> = ({
@@ -31,6 +33,8 @@ export const InteractiveClock: React.FC<InteractiveClockProps> = ({
   highlightTarget = null,
   lang = 'en',
   onReadClock,
+  isLiveTime = false,
+  onToggleLiveTime,
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [draggingHand, setDraggingHand] = useState<'minute' | 'hour' | null>(null);
@@ -491,51 +495,79 @@ export const InteractiveClock: React.FC<InteractiveClockProps> = ({
         <circle cx={center} cy={center} r="3" fill="#F59E0B" />
       </svg>
 
-      {/* Hand Color Indicator Badges & Aligned Digital Clock */}
+      {/* Hand Color Indicator Badges & Aligned Digital Clock + Switch Time Button */}
       {showHandLabels && (
-        <div className="flex items-center gap-1.5 sm:gap-2 mt-2 text-xs font-black flex-wrap justify-center shrink-0">
-          {/* Hour Hand Tag (عقرب الساعات - حجم مدمج بدون قصير أحمر) */}
-          <div
-            id="hour-hand-label-badge"
-            className="flex items-center gap-1.5 bg-red-50 text-red-900 px-2.5 py-1 rounded-xl border border-red-200 shadow-2xs"
-          >
-            <span className="w-2.5 h-2.5 rounded-full bg-red-600 shrink-0"></span>
-            <span className="truncate">{lang === 'en' ? 'Hour Hand' : 'عَقْرَبُ السَّاعَاتِ'}</span>
+        <div className="w-full max-w-[340px] grid grid-cols-2 gap-2 mt-2 text-xs font-black shrink-0 px-1">
+          {/* Column 1: Hour hand on top, Minute hand directly below it */}
+          <div className="flex flex-col gap-1.5">
+            {/* Hour Hand Tag */}
+            <div
+              id="hour-hand-label-badge"
+              className="flex items-center justify-center gap-1.5 bg-red-50 text-red-900 px-2.5 py-1.5 rounded-xl border border-red-200 shadow-2xs h-9"
+            >
+              <span className="w-2.5 h-2.5 rounded-full bg-red-600 shrink-0"></span>
+              <span className="truncate">{lang === 'en' ? 'Hour Hand' : 'عَقْرَبُ السَّاعَاتِ'}</span>
+            </div>
+
+            {/* Minute Hand Tag (تحت عقرب الساعات مباشرة) */}
+            <div
+              id="minute-hand-label-badge"
+              className="flex items-center justify-center gap-1.5 bg-blue-50 text-blue-900 px-2.5 py-1.5 rounded-xl border border-blue-200 shadow-2xs h-9"
+            >
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shrink-0"></span>
+              <span className="truncate">{lang === 'en' ? 'Minute Hand' : 'عَقْرَبُ الدَّقَائِقِ'}</span>
+            </div>
           </div>
 
-          {/* Digital Clock Aligned in between the hand badges (الساعة الرقمية بمحاذاة زري العقربين) */}
-          <div
-            id="clock-aligned-digital-display"
-            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 bg-slate-950 text-white rounded-xl font-mono shadow-xs border border-slate-800"
-          >
-            <span className="text-[11px] text-amber-300 font-bold hidden sm:inline">
-              {lang === 'en' ? 'Digital:' : 'السَّاعَةُ:'}
-            </span>
-            <span className="text-sm sm:text-base font-black text-amber-400 tracking-wider">
-              {`${(hours % 12 || 12).toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`}
-            </span>
-            <span className="text-[10px] font-black px-1.5 py-0.5 rounded bg-slate-800 text-amber-300 border border-slate-700">
-              {lang === 'en' ? (hours >= 12 ? 'PM' : 'AM') : (hours >= 12 ? 'م' : 'ص')}
-            </span>
-            {onReadClock && (
+          {/* Column 2: Digital Clock on top, Switch Time button directly below it */}
+          <div className="flex flex-col gap-1.5">
+            {/* Digital Clock Display */}
+            <div
+              id="clock-aligned-digital-display"
+              className="flex items-center justify-between px-2.5 py-1 bg-slate-950 text-white rounded-xl font-mono shadow-xs border border-slate-800 h-9"
+            >
+              <div className="flex items-center gap-1">
+                <span className="text-sm font-black text-amber-400 tracking-wider">
+                  {`${(hours % 12 || 12).toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`}
+                </span>
+                <span className="text-[10px] font-black px-1 py-0.5 rounded bg-slate-800 text-amber-300 border border-slate-700">
+                  {lang === 'en' ? (hours >= 12 ? 'PM' : 'AM') : (hours >= 12 ? 'م' : 'ص')}
+                </span>
+              </div>
+              {onReadClock && (
+                <button
+                  type="button"
+                  id="clock-read-voice-btn"
+                  onClick={onReadClock}
+                  className="p-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 transition cursor-pointer active:scale-95 shrink-0"
+                  title={lang === 'en' ? 'Read Clock' : 'قِرَاءَةُ السَّاعَةِ'}
+                >
+                  <Volume2 className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Switch Time Button (تحت زر الساعة الرقمية مباشرة) */}
+            {onToggleLiveTime ? (
               <button
                 type="button"
-                onClick={onReadClock}
-                className="p-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 transition cursor-pointer active:scale-95 ml-0.5"
-                title={lang === 'en' ? 'Read Clock' : 'قِرَاءَةُ السَّاعَةِ'}
+                id="toggle-time-btn"
+                onClick={onToggleLiveTime}
+                className={`flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-xl text-xs font-black transition cursor-pointer border shadow-2xs active:scale-95 h-9 ${
+                  isLiveTime
+                    ? 'bg-emerald-100 border-emerald-300 text-emerald-900 animate-pulse'
+                    : 'bg-slate-100 border-slate-300 text-slate-800 hover:bg-slate-200'
+                }`}
+                title={lang === 'en' ? 'Switch Time Mode' : 'تَبْدِيلُ الْوَقْتِ'}
               >
-                <Volume2 className="w-3.5 h-3.5" />
+                <Clock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span className="truncate">
+                  {isLiveTime
+                    ? (lang === 'en' ? 'Live Time 🔴' : 'الْوَقْتُ الْحَيُّ 🔴')
+                    : (lang === 'en' ? 'Switch Time ⏱️' : 'تَبْدِيلُ الْوَقْتِ ⏱️')}
+                </span>
               </button>
-            )}
-          </div>
-
-          {/* Minute Hand Tag (عقرب الدقائق - حجم مدمج بدون طويل أزرق) */}
-          <div
-            id="minute-hand-label-badge"
-            className="flex items-center gap-1.5 bg-blue-50 text-blue-900 px-2.5 py-1 rounded-xl border border-blue-200 shadow-2xs"
-          >
-            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shrink-0"></span>
-            <span className="truncate">{lang === 'en' ? 'Minute Hand' : 'عَقْرَبُ الدَّقَائِقِ'}</span>
+            ) : null}
           </div>
         </div>
       )}
