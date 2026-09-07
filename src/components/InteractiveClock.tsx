@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { getClockAngles, angleToMinutes, angleToHour } from '../utils/timeFormatters';
 import { sounds } from '../utils/soundEffects';
-import { Volume2, Clock } from 'lucide-react';
+import { Volume2 } from 'lucide-react';
 
 interface InteractiveClockProps {
   hours: number; // 0-23
@@ -16,8 +16,6 @@ interface InteractiveClockProps {
   highlightTarget?: { hours: number; minutes: number } | null;
   lang?: 'en' | 'ar';
   onReadClock?: () => void;
-  isLiveTime?: boolean;
-  onToggleLiveTime?: () => void;
 }
 
 export const InteractiveClock: React.FC<InteractiveClockProps> = ({
@@ -33,8 +31,6 @@ export const InteractiveClock: React.FC<InteractiveClockProps> = ({
   highlightTarget = null,
   lang = 'en',
   onReadClock,
-  isLiveTime = false,
-  onToggleLiveTime,
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [draggingHand, setDraggingHand] = useState<'minute' | 'hour' | null>(null);
@@ -547,24 +543,25 @@ export const InteractiveClock: React.FC<InteractiveClockProps> = ({
               )}
             </div>
 
-            {/* Switch Time Button (تحت زر الساعة الرقمية مباشرة) */}
-            {onToggleLiveTime ? (
+            {/* Switch AM/PM Button (تحت زر الساعة الرقمية مباشرة) */}
+            {onChangeTime ? (
               <button
                 type="button"
-                id="toggle-time-btn"
-                onClick={onToggleLiveTime}
-                className={`flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-xl text-xs font-black transition cursor-pointer border shadow-2xs active:scale-95 h-9 ${
-                  isLiveTime
-                    ? 'bg-emerald-100 border-emerald-300 text-emerald-900 animate-pulse'
-                    : 'bg-slate-100 border-slate-300 text-slate-800 hover:bg-slate-200'
-                }`}
-                title={lang === 'en' ? 'Switch Time Mode' : 'تَبْدِيلُ الْوَقْتِ'}
+                id="toggle-ampm-btn"
+                onClick={() => {
+                  sounds.playClick();
+                  onChangeTime((hours + 12) % 24, minutes);
+                }}
+                className="flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-xl text-xs font-black transition cursor-pointer border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-950 shadow-2xs active:scale-95 h-9"
+                title={lang === 'en' ? 'Switch between AM and PM' : 'تَبْدِيلُ الْفَتْرَةِ بَيْنَ صَبَاحًا وَمَسَاءً'}
               >
-                <Clock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                <span className="truncate">
-                  {isLiveTime
-                    ? (lang === 'en' ? 'Live Time 🔴' : 'الْوَقْتُ الْحَيُّ 🔴')
-                    : (lang === 'en' ? 'Switch Time ⏱️' : 'تَبْدِيلُ الْوَقْتِ ⏱️')}
+                <span className="text-slate-600 font-bold text-[11px] shrink-0">
+                  {lang === 'en' ? 'Switch:' : 'تَبْدِيلٌ:'}
+                </span>
+                <span className="text-amber-900 font-black text-xs truncate">
+                  {lang === 'en'
+                    ? (hours >= 12 ? 'AM ☀️' : 'PM 🌙')
+                    : (hours >= 12 ? 'صَبَاحًا ☀️' : 'مَسَاءً 🌙')}
                 </span>
               </button>
             ) : null}
