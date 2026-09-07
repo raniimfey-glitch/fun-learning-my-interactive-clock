@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppMode, Language } from '../types';
-import { BookOpen, Clock, Gamepad2, HelpCircle, Calendar } from 'lucide-react';
+import { BookOpen, Clock, Gamepad2, HelpCircle, Calendar, CheckSquare } from 'lucide-react';
 import { sounds } from '../utils/soundEffects';
 
 interface HomeScreenProps {
@@ -53,6 +53,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       borderColor: 'border-emerald-300 hover:border-emerald-400',
       shadowColor: 'shadow-emerald-500/20',
       badgeBg: 'bg-emerald-100 text-emerald-950',
+    },
+    {
+      id: 'time-practice',
+      titleAr: 'تَمْرِينُ الْوَقْتِ (صَبَاحًا/مَسَاءً)',
+      titleEn: 'Time Practice (AM/PM)',
+      icon: CheckSquare,
+      colorGradient: 'from-purple-500 to-purple-600',
+      borderColor: 'border-purple-300 hover:border-purple-400',
+      shadowColor: 'shadow-purple-500/20',
+      badgeBg: 'bg-purple-100 text-purple-950',
     },
     {
       id: 'quiz',

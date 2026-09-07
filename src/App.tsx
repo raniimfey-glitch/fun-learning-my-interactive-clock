@@ -7,6 +7,7 @@ import { SetClockGame } from './components/SetClockGame';
 import { QuizMode } from './components/QuizMode';
 import { DailyRoutineMode } from './components/DailyRoutineMode';
 import { LearnGuideView } from './components/LearnGuideView';
+import { TimePracticeMode } from './components/TimePracticeMode';
 import { SplashScreen } from './components/SplashScreen';
 import { sounds } from './utils/soundEffects';
 
@@ -155,6 +156,13 @@ export default function App() {
 
           {currentMode === 'set-clock' && (
             <SetClockGame
+              onEarnStar={handleEarnStar}
+              lang={lang}
+            />
+          )}
+
+          {currentMode === 'time-practice' && (
+            <TimePracticeMode
               onEarnStar={handleEarnStar}
               lang={lang}
             />

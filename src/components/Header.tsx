@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppMode, Language } from '../types';
-import { BookOpen, Clock, Gamepad2, HelpCircle, Calendar, ArrowRight, ArrowLeft, Languages } from 'lucide-react';
+import { BookOpen, Clock, Gamepad2, HelpCircle, Calendar, ArrowRight, ArrowLeft, Languages, CheckSquare } from 'lucide-react';
 import { sounds } from '../utils/soundEffects';
 
 interface HeaderProps {
@@ -23,6 +23,7 @@ export const Header: React.FC<HeaderProps> = ({
     guide: { ar: 'دَلِيلُ الدَّرْسِ', en: 'Lesson Guide', icon: BookOpen },
     explore: { ar: 'اِسْتِكْشَافُ السَّاعَةِ', en: 'Explore Clock', icon: Clock },
     'set-clock': { ar: 'اِضْبِطِ السَّاعَةَ', en: 'Set the Clock', icon: Gamepad2 },
+    'time-practice': { ar: 'تَمْرِينُ الْوَقْتِ (ص/م)', en: 'Time Practice', icon: CheckSquare },
     quiz: { ar: 'اخْتِبَارُ السَّاعَةِ', en: 'Clock Quiz', icon: HelpCircle },
     routine: { ar: 'الرُّوتِينُ الْيَوْمِيُّ', en: 'Daily Routine', icon: Calendar },
   };
