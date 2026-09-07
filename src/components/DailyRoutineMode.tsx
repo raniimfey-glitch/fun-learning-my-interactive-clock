@@ -279,9 +279,9 @@ export const DailyRoutineMode: React.FC<DailyRoutineModeProps> = ({ onEarnStar, 
   };
 
   return (
-    <div className="app-game-card w-full flex-1 min-h-0 flex flex-col lg:flex-row gap-2.5 sm:gap-3.5 items-stretch overflow-hidden">
-      {/* Left Column: Clock Face */}
-      <div className="w-full lg:w-[420px] bg-white rounded-2xl sm:rounded-3xl p-2.5 sm:p-3.5 shadow-xs border border-slate-200/80 flex flex-col items-center justify-between shrink-0 overflow-hidden">
+    <div className="w-full max-w-4xl mx-auto flex-1 min-h-0 flex flex-col lg:flex-row gap-2.5 sm:gap-3 items-stretch justify-center overflow-y-auto lg:overflow-hidden p-1">
+      {/* Left Column: Clock Face (حجم مصغر ومناسب) */}
+      <div className="w-full lg:w-[340px] xl:w-[360px] bg-white rounded-2xl sm:rounded-3xl p-2.5 sm:p-3 shadow-xs border border-slate-200/80 flex flex-col items-center justify-between shrink-0 overflow-hidden">
         <div className="w-full pb-2 border-b border-slate-100 mb-1 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
             <div className="p-1.5 rounded-xl bg-amber-50 border border-amber-200">
@@ -291,13 +291,13 @@ export const DailyRoutineMode: React.FC<DailyRoutineModeProps> = ({ onEarnStar, 
               <span className="text-xs font-black text-amber-800">
                 {lang === 'en' ? 'Activity Time:' : 'وَقْتُ النَّشَاطِ:'}
               </span>
-              <h3 className="text-sm sm:text-base font-black text-slate-950 truncate max-w-[200px]">
+              <h3 className="text-sm sm:text-base font-black text-slate-950 truncate max-w-[180px]">
                 {currentItem.title}
               </h3>
             </div>
           </div>
 
-          <span className="font-mono font-black text-xs sm:text-sm text-slate-950 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200">
+          <span className="font-mono font-black text-xs sm:text-sm text-slate-950 bg-slate-100 px-2 py-1 rounded-xl border border-slate-200">
             {digital.time12} {lang === 'en' ? digital.period12En : (digital.isPm ? 'مَسَاءً' : 'صَبَاحًا')}
           </span>
         </div>
@@ -309,26 +309,26 @@ export const DailyRoutineMode: React.FC<DailyRoutineModeProps> = ({ onEarnStar, 
             interactive={false}
             showMinuteRing={true}
             showHandLabels={false}
-            size={360}
+            size={275}
             lang={lang}
           />
         </div>
       </div>
 
-      {/* Right Column: Active Routine Card with Next Navigation */}
-      <div className="w-full lg:flex-1 min-h-0 flex flex-col justify-between bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-5 shadow-xs border border-slate-200/80 overflow-y-auto app-scrollable-card gap-3">
+      {/* Right Column: Active Routine Card with Spoken Routine (منطوق فقط) */}
+      <div className="w-full lg:flex-1 min-h-0 flex flex-col justify-between bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xs border border-slate-200/80 overflow-y-auto app-scrollable-card gap-2.5">
         {/* Header: Progress & Step Counter */}
-        <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100 shrink-0">
+        <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-100 shrink-0">
           <div className="flex items-center gap-2">
-            <span className="text-xs sm:text-sm font-black text-amber-900 bg-amber-50 border border-amber-200 px-3 py-1 rounded-xl">
+            <span className="text-xs font-black text-amber-900 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-xl">
               {lang === 'en'
                 ? `Activity ${currentIndex + 1} of ${routineItems.length}`
                 : `النَّشَاطُ ${currentIndex + 1} مِنْ ${routineItems.length}`}
             </span>
             {completedItems.includes(currentItem.id) && (
-              <span className="text-xs font-black text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl flex items-center gap-1">
+              <span className="text-xs font-black text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded-xl flex items-center gap-1">
                 <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-                <span>{lang === 'en' ? 'Completed' : 'مُكْتَمَلٌ'}</span>
+                <span>{lang === 'en' ? 'Done' : 'مُكْتَمَلٌ'}</span>
               </span>
             )}
           </div>
@@ -344,8 +344,8 @@ export const DailyRoutineMode: React.FC<DailyRoutineModeProps> = ({ onEarnStar, 
                 }}
                 className={`transition-all rounded-full cursor-pointer ${
                   idx === currentIndex
-                    ? 'w-6 h-2.5 bg-amber-500 rounded-full'
-                    : 'w-2.5 h-2.5 bg-slate-200 hover:bg-slate-300'
+                    ? 'w-5 h-2 bg-amber-500 rounded-full'
+                    : 'w-2 h-2 bg-slate-200 hover:bg-slate-300'
                 }`}
                 title={item.title}
               />
@@ -353,61 +353,56 @@ export const DailyRoutineMode: React.FC<DailyRoutineModeProps> = ({ onEarnStar, 
           </div>
         </div>
 
-        {/* Activity Details Box */}
-        <div className="flex-1 flex flex-col justify-center gap-3 py-1">
-          {/* Title & Large Icon */}
+        {/* Activity Details Box - Spoken Only (منطوق فقط وبحجم مصغر) */}
+        <div className="flex-1 flex flex-col justify-center gap-2.5 py-1">
+          {/* Title & Icon */}
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-2xl bg-amber-50 border-2 border-amber-200 shrink-0">
-              {renderIcon(currentItem.iconName, "w-8 h-8 sm:w-10 sm:h-10")}
+            <div className="p-2.5 rounded-2xl bg-amber-50 border-2 border-amber-200 shrink-0">
+              {renderIcon(currentItem.iconName, "w-7 h-7 sm:w-8 sm:h-8")}
             </div>
             <div>
               <div className="text-xs font-black text-amber-800 mb-0.5">
-                {lang === 'en' ? 'Current Routine:' : 'النَّشَاطُ الْيَوْمِيُّ لِلتِّلْمِيذِ:'}
+                {lang === 'en' ? 'Daily Activity:' : 'النَّشَاطُ الْيَوْمِيُّ:'}
               </div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-950">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-black text-slate-950">
                 {currentItem.title}
               </h2>
             </div>
           </div>
 
-          {/* Spoken Time Banner */}
-          <div className="bg-amber-50/90 border border-amber-300 rounded-2xl p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-2xs">
-            <div className={`flex-1 text-center ${lang === 'en' ? 'sm:text-left' : 'sm:text-right'}`}>
-              <div className="text-xs font-black text-amber-900 mb-1 flex items-center justify-center sm:justify-start gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                <span>{lang === 'en' ? 'SAY AND READ THE TIME:' : 'قِرَاءَةُ وَنُطْقُ السَّاعَةِ (مُشَكَّلَةٌ):'}</span>
+          {/* Spoken Routine Audio Player Card (منطوق فقط بدون نصوص طويلة) */}
+          <div className="bg-amber-50/90 border border-amber-300 rounded-2xl p-3 sm:p-4 flex items-center justify-between gap-3 shadow-2xs">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-amber-500 text-white shadow-2xs shrink-0">
+                <Volume2 className="w-5 h-5 animate-pulse" />
               </div>
-              <div className="text-lg sm:text-xl md:text-2xl font-black text-slate-950 leading-relaxed font-['Baloo_Bhaijaan_2','Tajawal',sans-serif]">
-                {spoken}
+              <div className={lang === 'en' ? 'text-left' : 'text-right'}>
+                <div className="text-xs font-black text-amber-900">
+                  {lang === 'en' ? 'Spoken Daily Routine:' : 'الرُّوتِينُ الْيَوْمِيُّ (صَوْتِيًّا):'}
+                </div>
+                <div className="text-xs sm:text-sm font-black text-slate-800">
+                  {lang === 'en' ? 'Audio description of activity & time' : 'اسْتَمِعْ لِتَفَاصِيلِ النَّشَاطِ وَوَقْتِهِ بِالصَّوْتِ'}
+                </div>
               </div>
             </div>
 
             <button
+              type="button"
               onClick={handleSpeakCurrent}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs sm:text-sm font-black transition shadow-xs active:scale-95 shrink-0 cursor-pointer"
-              title={lang === 'en' ? 'Listen to activity description' : 'اسْتَمِعْ لِلنَّشَاطِ صَوْتِيًّا'}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs sm:text-sm font-black transition shadow-xs active:scale-95 shrink-0 cursor-pointer"
+              title={lang === 'en' ? 'Listen to activity' : 'اسْتَمِعْ لِلنَّشَاطِ صَوْتِيًّا'}
             >
               <Volume2 className="w-4 h-4" />
               <span>{lang === 'en' ? 'Listen 🔊' : 'اسْتَمِعْ 🔊'}</span>
             </button>
           </div>
-
-          {/* Detailed Story / Routine Description */}
-          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 sm:p-4">
-            <div className="text-xs font-black text-slate-500 mb-1">
-              {lang === 'en' ? 'WHAT THE STUDENT DOES:' : 'مَاذَا يَفْعَلُ التِّلْمِيذُ فِي هَذَا الْوَقْتِ:'}
-            </div>
-            <p className="text-sm sm:text-base font-bold text-slate-800 leading-relaxed">
-              {currentItem.description}
-            </p>
-          </div>
         </div>
 
         {/* Bottom Navigation Buttons: Previous & Next Activity */}
-        <div className="pt-2 border-t border-slate-100 flex items-center gap-2.5 shrink-0">
+        <div className="pt-2 border-t border-slate-100 flex items-center gap-2 shrink-0">
           <button
             onClick={handlePrev}
-            className="py-3 px-4 rounded-xl border border-slate-200 bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-xs sm:text-sm flex items-center gap-1.5 transition cursor-pointer active:scale-95"
+            className="py-2.5 px-3.5 rounded-xl border border-slate-200 bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-xs sm:text-sm flex items-center gap-1.5 transition cursor-pointer active:scale-95"
             title={lang === 'en' ? 'Previous Activity' : 'الرُّجُوعُ لِلنَّشَاطِ السَّابِقِ'}
           >
             {lang === 'en' ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
@@ -417,14 +412,14 @@ export const DailyRoutineMode: React.FC<DailyRoutineModeProps> = ({ onEarnStar, 
           <button
             id="next-routine-activity-btn"
             onClick={handleNext}
-            className="flex-1 py-3 px-5 rounded-xl bg-amber-600 hover:bg-amber-700 active:scale-[0.98] text-white font-black text-sm sm:text-base shadow-xs hover:shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
+            className="flex-1 py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 active:scale-[0.98] text-white font-black text-xs sm:text-sm shadow-xs hover:shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
           >
             <span>
               {currentIndex === routineItems.length - 1
                 ? (lang === 'en' ? 'Restart Routine 🔄' : 'إِعَادَةُ الدَّوْرَةِ الْيَوْمِيَّةِ 🔄')
                 : (lang === 'en' ? 'Next Activity' : 'النَّشَاطُ التَّالِي')}
             </span>
-            {lang === 'en' ? <ArrowRight className="w-5 h-5" /> : <ArrowLeft className="w-5 h-5" />}
+            {lang === 'en' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
           </button>
         </div>
       </div>

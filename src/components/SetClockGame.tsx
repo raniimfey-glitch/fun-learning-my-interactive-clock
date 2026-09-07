@@ -4,7 +4,7 @@ import { InteractiveClock } from './InteractiveClock';
 import { sounds } from '../utils/soundEffects';
 import { formatArabicSpokenTime, formatEnglishSpokenTime, formatDigitalTime } from '../utils/timeFormatters';
 import { Language } from '../types';
-import { CheckCircle2, RotateCcw, HelpCircle, Star, Award, Sparkles, ArrowLeft, ArrowRight, Volume2 } from 'lucide-react';
+import { CheckCircle2, RotateCcw, HelpCircle, ArrowLeft, ArrowRight, Volume2 } from 'lucide-react';
 
 interface SetClockGameProps {
   onEarnStar: () => void;
@@ -232,13 +232,14 @@ export const SetClockGame: React.FC<SetClockGameProps> = ({
 
       {/* Right Column: Mission Card & Feedback */}
       <div className="w-full md:flex-1 min-h-0 flex flex-col gap-2 shrink-1 overflow-hidden">
-        {/* Header: Check Answer Button (replacing old Score Box) + Another Question */}
-        <div className="bg-white rounded-2xl p-2 sm:p-2.5 shadow-xs border border-slate-200/80 flex items-center justify-between gap-2 shrink-0">
-          {/* Replaced points rectangle with Check / Next button */}
+        {/* Header: [أتحقق] - [استمع] - [سؤال آخر] */}
+        <div className="bg-white rounded-2xl p-2 sm:p-2.5 shadow-xs border border-slate-200/80 flex items-center justify-between gap-1.5 sm:gap-2 shrink-0">
+          {/* 1. زر أتحقق */}
           <button
             id="check-clock-answer-header-btn"
+            type="button"
             onClick={feedback === 'correct' ? handleNext : checkAnswer}
-            className={`flex items-center justify-center gap-2 py-2 px-4 sm:px-5 rounded-xl font-black text-xs sm:text-sm shadow-xs transition cursor-pointer active:scale-95 ${
+            className={`flex items-center justify-center gap-1.5 py-2 px-3.5 sm:px-4 rounded-xl font-black text-xs sm:text-sm shadow-xs transition cursor-pointer active:scale-95 shrink-0 ${
               feedback === 'correct'
                 ? 'bg-emerald-600 hover:bg-emerald-700 text-white animate-bounce'
                 : feedback === 'wrong'
@@ -264,9 +265,32 @@ export const SetClockGame: React.FC<SetClockGameProps> = ({
             )}
           </button>
 
+          {/* 2. زر استمع (بين زري أتحقق وسؤال آخر) */}
           <button
+            type="button"
+            id="speak-challenge-header-btn"
+            onClick={() => currentChallenge && speakPrompt(currentChallenge.phoneticPrompt)}
+            className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-black transition border shadow-2xs cursor-pointer active:scale-95 shrink-0 ${
+              isSpeaking
+                ? 'bg-amber-500 text-white border-amber-600 animate-pulse'
+                : 'bg-amber-50 text-amber-950 border-amber-300 hover:bg-amber-100'
+            }`}
+            title={lang === 'en' ? 'Listen to question' : 'إِعَادَةُ نُطْقِ السُّؤَالِ صَوْتِيًّا'}
+          >
+            <Volume2 className="w-4 h-4 text-amber-700 shrink-0" />
+            <span>
+              {isSpeaking
+                ? (lang === 'en' ? 'Speaking...' : 'جَارٍ النُّطْقُ...')
+                : (lang === 'en' ? 'Listen 🔊' : 'اسْتَمِعْ 🔊')}
+            </span>
+          </button>
+
+          {/* 3. زر سؤال آخر */}
+          <button
+            type="button"
+            id="another-question-header-btn"
             onClick={() => loadNewChallenge(level)}
-            className="flex items-center gap-1.5 text-xs font-black text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-xl transition active:scale-95 cursor-pointer border border-slate-200"
+            className="flex items-center justify-center gap-1.5 text-xs sm:text-sm font-black text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-xl transition active:scale-95 cursor-pointer border border-slate-200 shrink-0"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>{lang === 'en' ? 'Another' : 'سُؤَالٌ آخَرُ'}</span>
@@ -277,30 +301,6 @@ export const SetClockGame: React.FC<SetClockGameProps> = ({
         {currentChallenge && (
           <div className="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xs border border-slate-200/80 flex-1 min-h-0 flex flex-col justify-between overflow-y-auto app-scrollable-card">
             <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between gap-2 shrink-0">
-                <div className="flex items-center gap-1.5 text-amber-800 font-black text-xs sm:text-sm">
-                  <Award className="w-4 h-4 text-amber-600" />
-                  <span>{lang === 'en' ? 'MISSION:' : 'الْمُهِمَّةُ الْمَطْلُوبَةُ:'}</span>
-                </div>
-
-                <button
-                  onClick={() => speakPrompt(currentChallenge.phoneticPrompt)}
-                  className={`flex items-center gap-1 px-3 py-1 rounded-xl text-xs font-black transition border shadow-2xs cursor-pointer active:scale-95 ${
-                    isSpeaking
-                      ? 'bg-amber-500 text-white border-amber-600 animate-pulse'
-                      : 'bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100'
-                  }`}
-                  title={lang === 'en' ? 'Listen to question' : 'إِعَادَةُ نُطْقِ السُّؤَالِ صَوْتِيًّا'}
-                >
-                  <Volume2 className="w-4 h-4" />
-                  <span>
-                    {isSpeaking
-                      ? (lang === 'en' ? 'Speaking...' : 'جَارٍ النُّطْقُ...')
-                      : (lang === 'en' ? 'Listen 🔊' : 'اسْتَمِعْ 🔊')}
-                  </span>
-                </button>
-              </div>
-
               <div className={`text-lg sm:text-xl md:text-2xl font-black text-slate-950 leading-relaxed bg-amber-50/90 p-3 sm:p-4 rounded-2xl border border-amber-300 ${
                 lang === 'en' ? 'text-left' : 'text-center sm:text-right'
               } font-['Baloo_Bhaijaan_2','Tajawal',sans-serif]`}>

@@ -199,9 +199,9 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
   const formattedHour = currentQuestion.correctHour24.toString().padStart(2, '0');
 
   return (
-    <div className="w-full max-w-3xl lg:max-w-[760px] mx-auto flex-1 min-h-0 flex flex-col md:flex-row gap-3 items-stretch justify-center overflow-y-auto md:overflow-hidden p-1">
-      {/* 1. Left Card: The Analog Clock Face (مساحة كافية ومريحة لظهور الساعة كاملة بجميع تفاصيلها) */}
-      <div className="w-full md:w-[320px] lg:w-[340px] bg-white rounded-2xl sm:rounded-3xl p-3 shadow-xs border border-slate-200/80 flex flex-col items-center justify-between shrink-0 overflow-visible">
+    <div className="w-full max-w-3xl lg:max-w-[780px] mx-auto flex-1 min-h-0 flex flex-col md:flex-row gap-3 items-stretch justify-center overflow-y-auto md:overflow-hidden p-1">
+      {/* 1. Left Card: The Analog Clock Face (ساعة أكبر حجماً نسبياً وبشكل واضح) */}
+      <div className="w-full md:w-[350px] lg:w-[370px] bg-white rounded-2xl sm:rounded-3xl p-3 shadow-xs border border-slate-200/80 flex flex-col items-center justify-between shrink-0 overflow-visible">
         {/* Top Header Tag: زر المرور إلى السؤال الموالي */}
         <div className="w-full flex items-center justify-between text-xs sm:text-sm font-black text-slate-700 px-1 shrink-0 pb-1.5 border-b border-slate-100">
           <span className="flex items-center gap-1.5 text-amber-800">
@@ -226,7 +226,7 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
           </button>
         </div>
 
-        {/* Clean Clock Display without interactive drag clutter */}
+        {/* Clean Clock Display without interactive drag clutter - Enlarge clock size */}
         <div className="flex-1 min-h-0 w-full flex items-center justify-center py-1 overflow-visible">
           <InteractiveClock
             hours={currentQuestion.analogHour}
@@ -235,7 +235,7 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
             showMinuteRing={true}
             showFractionsOverlay={false}
             showHandLabels={false}
-            size={250}
+            size={285}
             lang={currentLang}
           />
         </div>
