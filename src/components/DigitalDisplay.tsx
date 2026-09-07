@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, Minus, Sparkles } from 'lucide-react';
+import { Plus, Minus } from 'lucide-react';
 import { sounds } from '../utils/soundEffects';
 import { Language } from '../types';
 
@@ -35,22 +35,7 @@ export const DigitalDisplay: React.FC<DigitalDisplayProps> = ({
   };
 
   return (
-    <div className="w-full bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xs border border-slate-200/80 flex flex-col justify-center flex-1 min-h-0 overflow-y-auto app-scrollable-card gap-3">
-      {/* Step Adjustment Controls Header */}
-      <div className="flex items-center justify-between text-xs sm:text-sm font-black text-slate-700 px-1 shrink-0 pb-1 border-b border-slate-100">
-        <div className="flex items-center gap-1.5 text-amber-800">
-          <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
-          <span>
-            {lang === 'en'
-              ? 'STEP ADJUSTMENT CONTROLS:'
-              : 'أَزْرَارُ زِيَادَةِ وَإِنْقَاصِ الْوَقْتِ:'}
-          </span>
-        </div>
-        <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-lg border border-slate-200">
-          {lang === 'en' ? 'Quick Steppers ⏱️' : 'تَعْدِيلٌ سَرِيعٌ ⏱️'}
-        </span>
-      </div>
-
+    <div className="w-full bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xs border border-slate-200/80 flex flex-col justify-center flex-1 min-h-0 overflow-y-auto app-scrollable-card">
       {/* Grid of Stepper Controls */}
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3 flex-1 min-h-0 content-center">
         {/* 1. Hours Stepper (ساعة) */}
