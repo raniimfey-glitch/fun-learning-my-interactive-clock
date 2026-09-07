@@ -38,7 +38,8 @@ export const InteractiveClock: React.FC<InteractiveClockProps> = ({
   const { hourAngle, minuteAngle, secondAngle } = getClockAngles(hours, minutes, seconds);
 
   const center = size / 2;
-  const radius = size * 0.42;
+  // Scaled proportionally so the outer rim and minute badges are completely visible without clipping
+  const radius = showMinuteRing ? size * 0.355 : size * 0.395;
 
   // Calculate pointer angle relative to center (0 deg is top / 12 o'clock)
   const getAngleFromEvent = useCallback(
@@ -140,7 +141,7 @@ export const InteractiveClock: React.FC<InteractiveClockProps> = ({
   const ticks = Array.from({ length: 60 }, (_, i) => i);
 
   return (
-    <div className="relative select-none flex flex-col items-center justify-center p-1 w-full max-h-full flex-1 min-h-0 overflow-hidden">
+    <div className="relative select-none flex flex-col items-center justify-center p-1 w-full max-h-full flex-1 min-h-0 overflow-visible">
       <svg
         id="interactive-clock-svg"
         ref={svgRef}
@@ -148,10 +149,10 @@ export const InteractiveClock: React.FC<InteractiveClockProps> = ({
         style={{
           width: '100%',
           maxWidth: `${size}px`,
-          maxHeight: 'clamp(170px, 36vh, 320px)',
+          maxHeight: '100%',
           aspectRatio: '1 / 1',
         }}
-        className="app-clock-svg touch-none cursor-pointer drop-shadow-md select-none"
+        className="app-clock-svg touch-none cursor-pointer drop-shadow-md select-none shrink-1"
         onPointerDown={handleClockFacePointerDown}
       >
         <defs>
@@ -301,7 +302,7 @@ export const InteractiveClock: React.FC<InteractiveClockProps> = ({
             const minStr = minVal.toString().padStart(2, '0');
             const angle = (num / 12) * 360;
             const rad = ((angle - 90) * Math.PI) / 180;
-            const ringRadius = radius + 9;
+            const ringRadius = radius + 9.5;
             const mx = center + ringRadius * Math.cos(rad);
             const my = center + ringRadius * Math.sin(rad);
 
@@ -310,7 +311,7 @@ export const InteractiveClock: React.FC<InteractiveClockProps> = ({
             return (
               <g
                 key={`min-ring-${minVal}`}
-                className="cursor-pointer"
+                className={interactive ? 'cursor-pointer hover:opacity-90' : 'cursor-default'}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (!interactive || !onChangeTime) return;
@@ -319,25 +320,25 @@ export const InteractiveClock: React.FC<InteractiveClockProps> = ({
                 }}
               >
                 <rect
-                  x={mx - 16}
-                  y={my - 10}
-                  width="32"
-                  height="20"
-                  rx="10"
+                  x={mx - 15}
+                  y={my - 9}
+                  width="30"
+                  height="18"
+                  rx="9"
                   fill={isCurrentMinStep ? '#2563EB' : '#EFF6FF'}
                   stroke={isCurrentMinStep ? '#1D4ED8' : '#3B82F6'}
                   strokeWidth="1.5"
                 />
                 <text
                   x={mx}
-                  y={my + 4.5}
+                  y={my + 4}
                   textAnchor="middle"
-                  className={`text-[12px] font-black select-none ${
+                  className={`text-[11px] font-black select-none ${
                     isCurrentMinStep ? 'fill-white font-black' : 'fill-blue-800 font-black'
                   }`}
                   style={{ fontFamily: 'Fredoka, monospace' }}
                 >
-                  :{minStr}
+                  {minStr}
                 </text>
               </g>
             );

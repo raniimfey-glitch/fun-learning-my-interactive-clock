@@ -199,9 +199,9 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
   const formattedHour = currentQuestion.correctHour24.toString().padStart(2, '0');
 
   return (
-    <div className="w-full max-w-3xl lg:max-w-[760px] mx-auto flex-1 min-h-0 flex flex-col md:flex-row gap-3 sm:gap-4 items-stretch justify-center overflow-hidden">
-      {/* 1. Left Card: The Analog Clock Face (عرض أصغر ومُحْكَم) */}
-      <div className="w-full md:w-[290px] lg:w-[310px] bg-white rounded-2xl sm:rounded-3xl p-3 shadow-xs border border-slate-200/80 flex flex-col items-center justify-between shrink-0 overflow-hidden">
+    <div className="w-full max-w-3xl lg:max-w-[760px] mx-auto flex-1 min-h-0 flex flex-col md:flex-row gap-3 items-stretch justify-center overflow-y-auto md:overflow-hidden p-1">
+      {/* 1. Left Card: The Analog Clock Face (مساحة كافية ومريحة لظهور الساعة كاملة بجميع تفاصيلها) */}
+      <div className="w-full md:w-[320px] lg:w-[340px] bg-white rounded-2xl sm:rounded-3xl p-3 shadow-xs border border-slate-200/80 flex flex-col items-center justify-between shrink-0 overflow-visible">
         {/* Top Header Tag: زر المرور إلى السؤال الموالي */}
         <div className="w-full flex items-center justify-between text-xs sm:text-sm font-black text-slate-700 px-1 shrink-0 pb-1.5 border-b border-slate-100">
           <span className="flex items-center gap-1.5 text-amber-800">
@@ -227,7 +227,7 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
         </div>
 
         {/* Clean Clock Display without interactive drag clutter */}
-        <div className="flex-1 min-h-0 w-full flex items-center justify-center py-1">
+        <div className="flex-1 min-h-0 w-full flex items-center justify-center py-1 overflow-visible">
           <InteractiveClock
             hours={currentQuestion.analogHour}
             minutes={currentQuestion.minutes}
@@ -235,14 +235,14 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
             showMinuteRing={true}
             showFractionsOverlay={false}
             showHandLabels={false}
-            size={245}
+            size={250}
             lang={currentLang}
           />
         </div>
       </div>
 
-      {/* 2. Right Card: Clean, Uncluttered Question & Digital Input (عرض أصغر ومُحْكَم) */}
-      <div className="w-full md:w-[340px] lg:w-[370px] bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xs border border-slate-200/80 flex flex-col justify-between overflow-y-auto app-scrollable-card gap-3 shrink-0">
+      {/* 2. Right Card: Clean, Uncluttered Question & Digital Input (عرض مناسب ومُحْكَم) */}
+      <div className="w-full md:w-[300px] lg:w-[320px] bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xs border border-slate-200/80 flex flex-col justify-between overflow-y-auto app-scrollable-card gap-2.5 shrink-0">
         {/* Top Control Bar: [زر التبديل: صباحاً / مساءً] - [زر التحقق] - [زر استمع] */}
         <div className="flex items-center justify-between gap-1.5 sm:gap-2 pb-2.5 border-b border-slate-100 shrink-0">
           {/* 1. زر التبديل: صباحاً / مساءً */}
@@ -300,8 +300,8 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
           </button>
         </div>
 
-        {/* Clean, Focused Digital Input Fields (الساعة يساراً والدقائق يميناً: dir="ltr") */}
-        <div className="flex flex-col items-center justify-center my-auto py-3 gap-2.5">
+        {/* Clean, Focused Digital Input Fields (الساعة يساراً والدقائق يميناً بحجم مصغّر وأنيق) */}
+        <div className="flex flex-col items-center justify-center my-auto py-2 gap-2">
           <div className="text-xs font-black text-slate-600 text-center">
             {currentLang === 'en' ? 'Enter hours and minutes:' : 'أَدْخِلِ السَّاعَةَ وَالدَّقَائِقَ:'}
           </div>
@@ -312,11 +312,11 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
               if (feedback !== 'correct') checkAnswer();
             }}
             dir="ltr"
-            className="flex items-center justify-center gap-2 sm:gap-2.5"
+            className="flex items-center justify-center gap-2"
           >
-            {/* Hours Input: يساراً */}
+            {/* Hours Input: يساراً (حجم مصغّر) */}
             <div className="flex flex-col items-center gap-1">
-              <span className="text-[11px] font-black text-slate-500">
+              <span className="text-[10px] font-black text-slate-500">
                 {currentLang === 'en' ? 'Hours' : 'السَّاعَاتُ'}
               </span>
               <input
@@ -330,16 +330,16 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
                 value={userHour}
                 onChange={(e) => handleHourChange(e.target.value)}
                 placeholder="00"
-                className="w-18 h-16 sm:w-20 sm:h-18 text-center text-2xl sm:text-3xl font-black font-mono bg-slate-900 text-amber-400 rounded-2xl border-2 border-slate-700 focus:border-amber-400 focus:outline-none shadow-inner"
+                className="w-13 h-12 sm:w-15 sm:h-13 text-center text-xl sm:text-2xl font-black font-mono bg-slate-900 text-amber-400 rounded-xl border-2 border-slate-700 focus:border-amber-400 focus:outline-none shadow-inner"
               />
             </div>
 
             {/* Separator Colon */}
-            <span className="text-2xl sm:text-3xl font-black text-slate-800 self-end mb-4">:</span>
+            <span className="text-xl sm:text-2xl font-black text-slate-800 self-end mb-2 sm:mb-2.5">:</span>
 
-            {/* Minutes Input: يميناً */}
+            {/* Minutes Input: يميناً (حجم مصغّر) */}
             <div className="flex flex-col items-center gap-1">
-              <span className="text-[11px] font-black text-slate-500">
+              <span className="text-[10px] font-black text-slate-500">
                 {currentLang === 'en' ? 'Minutes' : 'الدَّقَائِقُ'}
               </span>
               <input
@@ -353,13 +353,13 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
                 value={userMin}
                 onChange={(e) => handleMinChange(e.target.value)}
                 placeholder="00"
-                className="w-18 h-16 sm:w-20 sm:h-18 text-center text-2xl sm:text-3xl font-black font-mono bg-slate-900 text-amber-400 rounded-2xl border-2 border-slate-700 focus:border-amber-400 focus:outline-none shadow-inner"
+                className="w-13 h-12 sm:w-15 sm:h-13 text-center text-xl sm:text-2xl font-black font-mono bg-slate-900 text-amber-400 rounded-xl border-2 border-slate-700 focus:border-amber-400 focus:outline-none shadow-inner"
               />
             </div>
 
             {/* Period Indicator Tag */}
-            <div className="self-end mb-3">
-              <span className="text-xs sm:text-sm font-black px-2.5 py-2 rounded-xl bg-slate-100 text-slate-800 border border-slate-300">
+            <div className="self-end mb-2 sm:mb-2.5">
+              <span className="text-xs font-black px-2 py-1.5 rounded-lg bg-slate-100 text-slate-800 border border-slate-300">
                 {isPm ? (currentLang === 'en' ? 'PM' : 'م') : (currentLang === 'en' ? 'AM' : 'ص')}
               </span>
             </div>
