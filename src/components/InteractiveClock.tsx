@@ -524,7 +524,7 @@ export const InteractiveClock: React.FC<InteractiveClockProps> = ({
             >
               <div className="flex items-center gap-1">
                 <span className="text-sm font-black text-amber-400 tracking-wider">
-                  {`${(hours % 12 || 12).toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`}
+                  {`${(hours >= 12 ? hours : (hours % 12 || 12)).toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`}
                 </span>
                 <span className="text-[10px] font-black px-1 py-0.5 rounded bg-slate-800 text-amber-300 border border-slate-700">
                   {lang === 'en' ? (hours >= 12 ? 'PM' : 'AM') : (hours >= 12 ? 'م' : 'ص')}

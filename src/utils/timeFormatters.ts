@@ -313,10 +313,11 @@ export function formatDigitalTime(hours24: number, minutes: number, seconds: num
   const pad = (n: number) => n.toString().padStart(2, '0');
   const h12 = hours24 % 12 === 0 ? 12 : hours24 % 12;
   const isPm = hours24 >= 12;
+  const hDisplay = isPm ? hours24 : h12;
 
   return {
-    time12: `${pad(h12)}:${pad(minutes)}`,
-    time12WithSec: `${pad(h12)}:${pad(minutes)}:${pad(seconds)}`,
+    time12: `${pad(hDisplay)}:${pad(minutes)}`,
+    time12WithSec: `${pad(hDisplay)}:${pad(minutes)}:${pad(seconds)}`,
     period12: isPm ? 'م' : 'ص',
     period12En: isPm ? 'PM' : 'AM',
     isPm,
