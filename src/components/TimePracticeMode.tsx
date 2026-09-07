@@ -3,7 +3,7 @@ import confetti from 'canvas-confetti';
 import { InteractiveClock } from './InteractiveClock';
 import { sounds } from '../utils/soundEffects';
 import { Language } from '../types';
-import { Sun, Moon, Volume2, CheckCircle2, RotateCcw, ArrowRight, ArrowLeft, Star, Sparkles, HelpCircle } from 'lucide-react';
+import { Sun, Moon, Volume2, CheckCircle2, RotateCcw, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
 
 interface TimePracticeModeProps {
   onEarnStar: () => void;
@@ -28,8 +28,6 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
   const [userHour, setUserHour] = useState<string>('');
   const [userMin, setUserMin] = useState<string>('');
   const [feedback, setFeedback] = useState<'idle' | 'correct' | 'wrong'>('idle');
-  const [stars, setStars] = useState<number>(0);
-  const [showHint, setShowHint] = useState<boolean>(false);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
 
   const hourInputRef = useRef<HTMLInputElement | null>(null);
@@ -71,7 +69,6 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
     setUserHour('');
     setUserMin('');
     setFeedback('idle');
-    setShowHint(false);
   }, [generateQuestion]);
 
   // Focus hour input when new question loads
@@ -142,7 +139,6 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
     if (isHourCorrect && isMinutesCorrect) {
       sounds.playCorrect();
       setFeedback('correct');
-      setStars((prev) => prev + 1);
       onEarnStar();
       try {
         confetti({
@@ -159,6 +155,24 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
     }
   };
 
+  const togglePeriod = () => {
+    sounds.playClick();
+    if (!currentQuestion) return;
+    const newPeriod: 'am' | 'pm' = currentQuestion.period === 'am' ? 'pm' : 'am';
+    let correctHour24: number;
+    if (newPeriod === 'pm') {
+      correctHour24 = currentQuestion.analogHour === 12 ? 12 : currentQuestion.analogHour + 12;
+    } else {
+      correctHour24 = currentQuestion.analogHour === 12 ? 12 : currentQuestion.analogHour;
+    }
+    setCurrentQuestion({
+      ...currentQuestion,
+      period: newPeriod,
+      correctHour24,
+    });
+    setFeedback('idle');
+  };
+
   const handleNext = () => {
     sounds.playClick();
     const nextQ = generateQuestion();
@@ -166,7 +180,6 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
     setUserHour('');
     setUserMin('');
     setFeedback('idle');
-    setShowHint(false);
     setQuestionIndex((prev) => prev + 1);
   };
 
@@ -178,7 +191,7 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
 
   return (
     <div className="w-full flex-1 min-h-0 flex flex-col md:flex-row gap-3 sm:gap-4 items-stretch overflow-hidden">
-      {/* 1. Left Card: The Analog Clock Face (نظيفة وواضحة تماماً) */}
+      {/* 1. Left Card: The Analog Clock Face (نظيفة وواضحة تماماً وبدون أي مستطيلات) */}
       <div className="w-full md:w-[350px] lg:w-[390px] bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xs border border-slate-200/80 flex flex-col items-center justify-between shrink-0 overflow-hidden">
         {/* Top Header Tag */}
         <div className="w-full flex items-center justify-between text-xs sm:text-sm font-black text-slate-700 px-1 shrink-0 pb-1 border-b border-slate-100">
@@ -202,42 +215,63 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
             showMinuteRing={true}
             showFractionsOverlay={false}
             showHandLabels={false}
-            size={280}
+            size={290}
             lang={currentLang}
           />
-        </div>
-
-        {/* Subtle Hands Reference Legend */}
-        <div className="w-full flex items-center justify-center gap-4 text-xs font-black text-slate-600 pt-1 shrink-0">
-          <div className="flex items-center gap-1.5 bg-red-50 text-red-800 px-2.5 py-1 rounded-xl border border-red-200 text-[11px]">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-600"></span>
-            <span>{currentLang === 'en' ? 'Hour Hand' : 'عَقْرَبُ السَّاعَاتِ (قَصِيرٌ)'}</span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-blue-50 text-blue-800 px-2.5 py-1 rounded-xl border border-blue-200 text-[11px]">
-            <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
-            <span>{currentLang === 'en' ? 'Minute Hand' : 'عَقْرَبُ الدَّقَائِقِ (طَوِيلٌ)'}</span>
-          </div>
         </div>
       </div>
 
       {/* 2. Right Card: Clean, Uncluttered Question & Digital Input */}
-      <div className="w-full md:flex-1 min-h-0 bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xs border border-slate-200/80 flex flex-col justify-between overflow-y-auto app-scrollable-card gap-3">
-        {/* Top Status Bar: Stars & Listen Prompt */}
-        <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-100 shrink-0">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 font-black text-xs sm:text-sm">
-              <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
-              <span>{currentLang === 'en' ? `Stars: ${stars}` : `النُّجُومُ: ${stars}`}</span>
-            </div>
-          </div>
-
+      <div className="w-full md:flex-1 min-h-0 bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xs border border-slate-200/80 flex flex-col justify-between overflow-y-auto app-scrollable-card gap-4">
+        {/* Top Control Bar: [زر التبديل: صباحاً / مساءً] - [زر التحقق] - [زر استمع] */}
+        <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-100 shrink-0">
+          {/* 1. زر التبديل: صباحاً / مساءً (بديل بطاقة النجوم) */}
           <button
             type="button"
+            id="toggle-period-btn"
+            onClick={togglePeriod}
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl sm:rounded-2xl font-black text-xs sm:text-sm border shadow-2xs transition-all active:scale-95 cursor-pointer shrink-0 ${
+              isPm
+                ? 'bg-indigo-50 hover:bg-indigo-100 text-indigo-950 border-indigo-300'
+                : 'bg-amber-50 hover:bg-amber-100 text-amber-950 border-amber-300'
+            }`}
+            title={currentLang === 'en' ? 'Switch Morning / Evening' : 'تَبْدِيلٌ: صَبَاحًا / مَسَاءً'}
+          >
+            {isPm ? (
+              <>
+                <Moon className="w-4 h-4 text-indigo-600 shrink-0" />
+                <span>{currentLang === 'en' ? 'Evening 🌙' : 'مَسَاءً 🌙 (تَبْدِيلٌ)'}</span>
+              </>
+            ) : (
+              <>
+                <Sun className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>{currentLang === 'en' ? 'Morning ☀️' : 'صَبَاحًا ☀️ (تَبْدِيلٌ)'}</span>
+              </>
+            )}
+          </button>
+
+          {/* 2. زر التحقق: في الوسط بين زر التبديل وزر استمع */}
+          <button
+            type="button"
+            id="check-answer-btn"
+            onClick={checkAnswer}
+            disabled={feedback === 'correct'}
+            className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 rounded-xl sm:rounded-2xl bg-amber-500 hover:bg-amber-600 disabled:opacity-60 text-white font-black text-xs sm:text-sm shadow-xs active:scale-95 cursor-pointer transition shrink-0"
+            title={currentLang === 'en' ? 'Check Answer' : 'تَأَكَّدْ مِنَ الإِجَابَةِ'}
+          >
+            <CheckCircle2 className="w-4 h-4 shrink-0" />
+            <span>{currentLang === 'en' ? 'Check' : 'تَحَقَّقْ'}</span>
+          </button>
+
+          {/* 3. زر استمع */}
+          <button
+            type="button"
+            id="speak-prompt-btn"
             onClick={speakPrompt}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all cursor-pointer shadow-2xs active:scale-95 border ${
+            className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-black transition-all cursor-pointer shadow-2xs active:scale-95 border shrink-0 ${
               isSpeaking
                 ? 'bg-amber-500 text-white border-amber-600 animate-pulse'
-                : 'bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-300'
+                : 'bg-slate-50 hover:bg-slate-100 text-slate-800 border-slate-300'
             }`}
             title={currentLang === 'en' ? 'Listen to Question' : 'اسْتَمِعْ لِلسُّؤَالِ'}
           >
@@ -246,55 +280,8 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
           </button>
         </div>
 
-        {/* The Question Prompt Card with Period Badge (صباحاً ☀️ / مساءً 🌙) */}
-        <div
-          className={`p-3.5 sm:p-4 rounded-2xl border transition-all ${
-            isPm
-              ? 'bg-indigo-50/90 border-indigo-200 text-indigo-950'
-              : 'bg-amber-50/90 border-amber-200 text-amber-950'
-          }`}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            {isPm ? (
-              <span className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-indigo-600 text-white text-xs sm:text-sm font-black shadow-xs">
-                <Moon className="w-4 h-4 text-indigo-200" />
-                <span>{currentLang === 'en' ? 'Evening / PM (24-Hour)' : 'تَوْقِيتُ الْمَسَاءِ (نِظَامُ 24 سَاعَةٍ)'}</span>
-              </span>
-            ) : (
-              <span className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500 text-white text-xs sm:text-sm font-black shadow-xs">
-                <Sun className="w-4 h-4 text-yellow-100" />
-                <span>{currentLang === 'en' ? 'Morning / AM' : 'تَوْقِيتُ الصَّبَاحِ (صَبَاحًا)'}</span>
-              </span>
-            )}
-          </div>
-
-          <h3 className="text-base sm:text-lg font-black leading-snug">
-            {currentLang === 'en'
-              ? isPm
-                ? 'Write the time indicated by the clock in evening time (24-hour system):'
-                : 'Write the time indicated by the clock in morning time:'
-              : isPm
-              ? 'اكْتُبِ الْوَقْتَ الَّذِي تُشِيرُ إِلَيْهِ السَّاعَةُ بِتَوْقِيتِ الْمَسَاءِ (نِظَامِ 24 سَاعَةٍ):'
-              : 'اكْتُبِ الْوَقْتَ الَّذِي تُشِيرُ إِلَيْهِ السَّاعَةُ بِتَوْقِيتِ الصَّبَاحِ:'}
-          </h3>
-
-          {/* Clean Hint Note */}
-          <div className="mt-2 text-xs font-bold text-slate-600 flex items-center gap-1.5">
-            <HelpCircle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-            <span>
-              {currentLang === 'en'
-                ? isPm
-                  ? 'Hint: In the evening, add 12 to the hour hand (e.g., 1 becomes 13, 2 becomes 14).'
-                  : 'Hint: In the morning, write the hour as pointed by the hand (01 to 11).'
-                : isPm
-                ? 'تَذَكَّرْ: فِي الْمَسَاءِ نُضِيفُ 12 إِلَى عَقْرَبِ السَّاعَاتِ (مَثَلًا: 1 تُصْبِحُ 13، وَ2 تُصْبِحُ 14).'
-                : 'تَذَكَّرْ: فِي الصَّبَاحِ نَكْتُبُ السَّاعَةَ كَمَا يُشِيرُ إِلَيْهَا الْعَقْرَبُ.'}
-            </span>
-          </div>
-        </div>
-
-        {/* Clean, Focused Digital Input Fields (واجهة نظيفة جداً وبسيطة) */}
-        <div className="flex flex-col items-center justify-center my-auto py-2 gap-3">
+        {/* Clean, Focused Digital Input Fields */}
+        <div className="flex flex-col items-center justify-center my-auto py-4 gap-3">
           <div className="text-xs sm:text-sm font-black text-slate-600 text-center">
             {currentLang === 'en' ? 'Enter hours and minutes:' : 'أَدْخِلِ السَّاعَةَ وَالدَّقَائِقَ:'}
           </div>
@@ -322,12 +309,12 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
                 value={userHour}
                 onChange={(e) => handleHourChange(e.target.value)}
                 placeholder="00"
-                className="w-18 h-16 sm:w-22 sm:h-20 text-center text-2xl sm:text-3xl font-black font-mono bg-slate-900 text-amber-400 rounded-2xl border-2 border-slate-700 focus:border-amber-400 focus:outline-none shadow-inner"
+                className="w-20 h-18 sm:w-24 sm:h-22 text-center text-3xl sm:text-4xl font-black font-mono bg-slate-900 text-amber-400 rounded-2xl border-2 border-slate-700 focus:border-amber-400 focus:outline-none shadow-inner"
               />
             </div>
 
             {/* Separator Colon */}
-            <span className="text-3xl sm:text-4xl font-black text-slate-800 self-end mb-4">:</span>
+            <span className="text-3xl sm:text-4xl font-black text-slate-800 self-end mb-5">:</span>
 
             {/* Minutes Input */}
             <div className="flex flex-col items-center gap-1">
@@ -345,13 +332,13 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
                 value={userMin}
                 onChange={(e) => handleMinChange(e.target.value)}
                 placeholder="00"
-                className="w-18 h-16 sm:w-22 sm:h-20 text-center text-2xl sm:text-3xl font-black font-mono bg-slate-900 text-amber-400 rounded-2xl border-2 border-slate-700 focus:border-amber-400 focus:outline-none shadow-inner"
+                className="w-20 h-18 sm:w-24 sm:h-22 text-center text-3xl sm:text-4xl font-black font-mono bg-slate-900 text-amber-400 rounded-2xl border-2 border-slate-700 focus:border-amber-400 focus:outline-none shadow-inner"
               />
             </div>
 
             {/* Period Indicator Tag */}
-            <div className="self-end mb-3">
-              <span className="text-sm sm:text-base font-black px-2.5 py-2 rounded-xl bg-slate-100 text-slate-800 border border-slate-300">
+            <div className="self-end mb-4">
+              <span className="text-sm sm:text-base font-black px-3 py-2.5 rounded-xl bg-slate-100 text-slate-800 border border-slate-300">
                 {isPm ? (currentLang === 'en' ? 'PM' : 'م') : (currentLang === 'en' ? 'AM' : 'ص')}
               </span>
             </div>
@@ -360,7 +347,7 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
 
         {/* Feedback Area / Results Banner */}
         {feedback === 'correct' && (
-          <div className="p-3 sm:p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 flex items-center justify-between gap-3 animate-fade-in">
+          <div className="p-3 sm:p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 flex items-center justify-between gap-3 animate-fade-in shrink-0">
             <div className="flex items-center gap-2.5">
               <div className="p-2 bg-emerald-500 text-white rounded-xl">
                 <CheckCircle2 className="w-5 h-5" />
@@ -389,7 +376,7 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
         )}
 
         {feedback === 'wrong' && (
-          <div className="p-3 sm:p-4 rounded-2xl bg-rose-50 border border-rose-300 text-rose-950 flex items-center justify-between gap-3 animate-fade-in">
+          <div className="p-3 sm:p-4 rounded-2xl bg-rose-50 border border-rose-300 text-rose-950 flex items-center justify-between gap-3 animate-fade-in shrink-0">
             <div>
               <p className="font-black text-xs sm:text-sm text-rose-900">
                 {currentLang === 'en' ? 'Not quite, try again! 😊' : 'حَاوِلْ مَرَّةً أُخْرَى! رَكِّزْ جَيِّدًا 😊'}
@@ -415,21 +402,6 @@ export const TimePracticeMode: React.FC<TimePracticeModeProps> = ({
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>{currentLang === 'en' ? 'Retry' : 'إِعَادَةٌ'}</span>
-            </button>
-          </div>
-        )}
-
-        {/* Action Button: Check Answer (Clean, single prominent button) */}
-        {feedback !== 'correct' && (
-          <div className="flex items-center justify-center pt-2 shrink-0">
-            <button
-              type="button"
-              id="submit-answer-btn"
-              onClick={checkAnswer}
-              className="w-full max-w-[320px] py-3 px-6 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-black text-sm sm:text-base shadow-sm active:scale-95 cursor-pointer flex items-center justify-center gap-2 transition"
-            >
-              <CheckCircle2 className="w-5 h-5" />
-              <span>{currentLang === 'en' ? 'Check Answer' : 'تَأَكَّدْ مِنَ الإِجَابَةِ'}</span>
             </button>
           </div>
         )}
