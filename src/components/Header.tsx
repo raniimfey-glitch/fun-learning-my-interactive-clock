@@ -33,7 +33,7 @@ export const Header: React.FC<HeaderProps> = ({
   const activeTitle = !isHome ? (lang === 'en' ? activityNames[currentMode].en : activityNames[currentMode].ar) : '';
 
   return (
-    <header className="app-header-top shrink-0 w-full bg-white/95 backdrop-blur-md border-b border-amber-200/80 z-30 shadow-2xs">
+    <header className="header app-header app-header-top shrink-0 w-full bg-white/95 backdrop-blur-md border-b border-amber-200/80 z-30 shadow-2xs">
       <div className="max-w-[900px] w-full mx-auto px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-3">
         {/* Left / Start Side: Back Button if in Activity OR Logo if Home */}
         {isHome ? (

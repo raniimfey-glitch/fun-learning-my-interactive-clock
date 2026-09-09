@@ -60,6 +60,40 @@
         });
       }
     </script>
+    <style>
+      /* Universal Single-Screen Layout Reset (No Vertical Scroll) */
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        height: 100dvh !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+        background-color: #fffbeb;
+      }
+
+      *, *::before, *::after {
+        box-sizing: inherit !important;
+      }
+
+      body, 
+      body > div:first-child, 
+      .app-wrapper, 
+      #app, 
+      #root {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        height: 100% !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        width: 100% !important;
+        max-width: 900px;
+        margin: 0 auto !important;
+        overflow: hidden !important;
+      }
+    </style>
   </head>
   <body class="h-full w-full overflow-hidden bg-amber-50/50 font-['Baloo_Bhaijaan_2','Tajawal',sans-serif] text-slate-800 antialiased selection:bg-amber-200 text-base">
     <div id="root" class="h-full w-full overflow-hidden"></div>

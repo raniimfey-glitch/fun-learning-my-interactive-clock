@@ -93,7 +93,7 @@ export default function App() {
   return (
     <div
       dir={lang === 'ar' ? 'rtl' : 'ltr'}
-      className={`min-h-screen bg-amber-50/40 text-slate-800 flex flex-col ${
+      className={`app-wrapper h-full w-full max-h-full overflow-hidden bg-amber-50/40 text-slate-800 flex flex-col justify-between ${
         lang === 'ar' ? "font-['Baloo_Bhaijaan_2','Tajawal',sans-serif]" : "font-sans"
       } text-base`}
     >
@@ -106,7 +106,7 @@ export default function App() {
 
       {/* Main Educational Application Content - Hidden until splash finishes */}
       <div
-        className={`flex-1 flex flex-col transition-opacity duration-500 ${
+        className={`app-content-wrapper flex-1 min-h-0 w-full h-full flex flex-col justify-between overflow-hidden transition-opacity duration-500 ${
           isSplashOpen ? 'opacity-0 pointer-events-none select-none' : 'opacity-100'
         }`}
       >
@@ -122,7 +122,7 @@ export default function App() {
         />
 
         {/* Main Content Area */}
-        <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 flex flex-col">
+        <main className="main main-content flex-1 min-h-0 w-full mx-auto p-2 sm:p-3 md:p-4 flex flex-col items-center justify-center overflow-y-auto">
           {/* Main Home Screen: Contains ONLY activity tabs without extra explanations */}
           {currentMode === 'home' && (
             <HomeScreen
@@ -184,7 +184,7 @@ export default function App() {
         </main>
 
         {/* Clean Footer */}
-        <footer className="w-full bg-white border-t border-slate-200/80 py-4 px-6 text-center text-sm md:text-base text-slate-700 font-bold shadow-xs">
+        <footer className="footer app-footer bottom-nav flex-shrink-0 w-full z-10 bg-white border-t border-slate-200/80 py-2 sm:py-3 px-4 sm:px-6 text-center text-xs sm:text-sm md:text-base text-slate-700 font-bold shadow-xs">
           <p>
             {lang === 'en'
               ? 'My Interactive Clock • Fun Learning • Ranim Fay • All Rights Reserved'

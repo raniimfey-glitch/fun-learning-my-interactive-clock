@@ -37,7 +37,7 @@ export const DigitalDisplay: React.FC<DigitalDisplayProps> = ({
   return (
     <div className="w-full bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xs border border-slate-200/80 flex flex-col justify-center items-center flex-1 min-h-0 overflow-y-auto app-scrollable-card">
       {/* Grid of Stepper Controls with relatively reduced width */}
-      <div className="w-full max-w-[440px] mx-auto grid grid-cols-2 gap-2 sm:gap-2.5 content-center">
+      <div className="w-full max-w-[440px] mx-auto grid grid-cols-2 gap-2 sm:gap-2.5 items-center">
         {/* 1. Hours Stepper (ساعة) */}
         <div className="flex items-center justify-between bg-red-50/90 px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl border border-red-200 shadow-2xs">
           <button
